@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HSG Inventory">
+<meta name="theme-color" content="#0e5c58">
+<title>HSG Inventory</title>
+<link rel="apple-touch-icon" href="data:image/png;base64,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piYyXdPKQhXPfvjev265nSF+vHTJl6uWB33+Vq37l8Cx3FshKb2m66mpU8orKzXOHrpyUiSm/MQO30Kvy/31mtXbDh4ggNMHD8ktKDixb18EmLZ4UUlFuaFpyc4hiLho06ZP5859b9H8dxfMf3fB/PcWzn9n/twZq1enlgtVvf9+6pTScJgx9tAVEy3bgkY7myjz/drdu9RYxw0cRFJyztW/DFESeV3ukb16AwARrduzG7hGVFvPccGmTQN/edvx99zZ77abn3pnis65xvkpAwYyBD0pbElNXoeqqtS/peFQW7pKHUtySCKPaW7cveu5j6cBwEWjjz9jyDAA4AnvaiJD04oPlU9bvAgBBncrunDk6IDXJ6ScumCupqWp2G4aBrjdPpfb53b74m9chpFaCVYSeQxz8549f/voQwS4YNSos4ePBADeOM1DSmkY5vQVy6K2JYkuPeGkUwYOLC4pUU+0LeWhkpJrxp02sGshEa3ZtXPxls2ay5VYX1jCLqkIHayoqLas3787Zc2unQBw/WnjJ445tSwc1tjh8rzKJKPea3XL9rY2jvGurC2lz+t97pOPth084DaMs4cdBwDJpXYlkabp78yfR0TdCwpuP/98IlqxfduizZu9pplaHtBvmgUeb9DjSX7l+nyBuubLRO9+r/f/ffrxlv373YZx5pChkLZGdToofXnV9u3//epLhmho2hu//u1l4071ahoiBt3uOy674pnrfqxKiz81dUpVTQ1PqqyLiLqm6Zx7TFdVtObuV18GAkn09LU/6pKTU2PFkoeRLEgaeWFbBK2ucyhzHiSdmCrILmtLdpKhaSWhisenvPXSrT+3bFtL2qYCACmlx+VatHnT8u3bhnXvMayoByK+M39epKY6Jys7IQ9q25Ty0UlX33fZFclXVpLknK/dufOi3z8BCBKSegfSNa00HH58ypv/uf0OSwiNs7T1KFX79armSiKv233P5Fd6dex45tDjuubmTbnz7h3FB8M1Nfn+rA6BgDrsqalT3pjzTdDrq6iOqDMSiInS7pa0A17fR4sXTf5mxjXjTuuSk/vYpGtueO7PwaxskcSJetewbdDakoNMXeeMccYSRct9pskZ85im+tcWItvre23WzPkbNxi6zhhTWy2JJjTGIjXVb8+dwxA1zqWU7y9aYBrJYoPcusEZ0zUt6PN1ysnpGAwmXp1zcjtkB7rlF9Tp3TCSeve+PnvWnPXrDE1jyAxdryc8CMBjGJwxxpiGh59+ItIYi9n2ZX98+qmpU/aWlQFAUX7B4MJuHQIBKeXy7dt+9Le/PPD6ZL/bo+jIEA1d54x5DTPRvpTS7XI98Pr/SkIhAPjx+DOuPf2MUCRSqycR6JqmrqFLN9qykmgrxq0gomXbfTt37t2xEwCs2b1rx8GDhqaN7t0n2+vdX162bNs2jXMiYohRy+qWnz+kqMgWUpKcv3FjJBpVW9UIYEsZ8HqP79OXIVZEquZv3HjYIoJo2fbgbkXd8vOVICGiuhXTgTNWEYks3LSRIZ7Qt1+Wx7O/vHzZtq2He7etbnmqdwEA8zZsqEr0jmgLMbxnz47ZAUFy8ebNZZWV6oeqeYYopAxXR7rm5o3s1btbXp6p6eGa6g179izdtjVUHQl4fYrHQspsj+f4Pn00xotDoSVbt7CkLYXqWGxoUfei/AICKgmFFm3epGsaAFi23TEYPK57D8bYzuLi1Tt36G0VaN+6QU2IWBOLRW0LANy6Yeg6EVVFa4SQusY9hpk8B8dsqzoaU3O+1+VKNkkpflRFowDEGfOZLqrbS3UsFrMsTPJ7qAvijHtNEwCqamqElLqmJTtzJHpXMiO190gsptxHvKapJakOiQMYYzHbjkSjFJdnXNO8pskZS8yS6iwi0SgBaYwnZKcCQ4xEozFhA4HGecLyq9gfiUUBwOCa2zTbbHJp9Yi3ROnvRN1vHi8cn+oGlrglqev4hr9toFi6AsWLWzev98NnIWWmO1Nbe1x5vhFJAEo5WNEoeTxpe6k3vMTYjqbwezPQ6gppasHtTAachuuEN/xt48t6N6/3xrTfmDrnlHkADfTSlhXUk+E4GDvICIccDjLCIYeDjHDI4SAjHHI4yAiHHA4yQiPG1Pr9WI/EwbcJjBEAq/V+duAgGYhAwICozbLTOfiuABkCEUMkIGjLvT4H33YQAQEiMSAgR+FwUBckJRAwBACSwLkjPBwAABAB50ASAdTuMyLnjlrqAECFa3IAjAdzUK0EceAAAIChmkaUEQzJSh+T4+B7CLJsFQChyEFEhLp+bMfk4NsArE2sflhyAFJtdPMxHJaDYw/lmJhwj018Lm0LNc3hx/cXRKhp0j6csuwwORAAnMTk32tgUrAhQJ1dWQKyLTSOWWi1g2MLNDSyreSwrTpb9qj8Wx2Dx/cQiERQL7KjXjobAEug0aZhVQ6OPYjQMMCq7+KekpgAiSwLnGXt9wq6TpZFKRFh9cmBACgJVJ5XR360e8RvNMqUzDNp3QQJCKRAjUNKwhMH7Q2MocZBCkqXtCbD7Scgy0ZNc5TT9gxE1DSy7EzZjBqSDWRZqPImOPNLO4OyhGoapcvSn8ARJo5afjDm8KP9gAgYOyIzoDGhCSQEMIa67vCjPUDtsDJGjUhj2giVkwikACJ0uZy6jt9tEKDLlbihRzy8ccZyAikEAqHGAbHWyOroqt8VEAECajoQkW2RkI28c43dSUEAEJIQgHE0DBCyMXLJwbcBqGnAGQkJUgA1YWe1idtsBCAESQkMlXPQEZUaB8cQtfdICrDsZqiMzdqDJQKbiBMgq9VVpSQhQMrDplVn0mlLJF92xpBzYIwsi6QEkiCaIi6S0NwNegSQBCAAgGKxWi8QxpAzACTFEiccpm3AmKojBEAkJBCQLQCSREVzn9OW8N6IuxwCIAmpMj0yYESO51DrgwABJUmyJSrh0XIWh/8PNJDhG/KJe40AAAAASUVORK5CYII=">
+<link rel="icon" href="data:image/png;base64,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">
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+  :root {
+    --teal: #0e5c58; --teal-d: #0a4643; --teal-l: #e6f2f1; --accent: #6ed2be;
+    --ink: #1d2733; --muted: #5f6b78; --line: #dde3e8; --bg: #f2f5f7; --card: #fff;
+    --red: #c0392b; --amber: #c27c0e; --green: #1e8449;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: var(--bg); color: var(--ink);
+         -webkit-text-size-adjust: 100%; padding-bottom: env(safe-area-inset-bottom); }
+  button, input, select, textarea { font: inherit; }
+  .hidden { display: none !important; }
+
+  header { position: sticky; top: 0; z-index: 20; background: var(--teal); color: #fff;
+           padding: calc(env(safe-area-inset-top) + 10px) 14px 10px; display: flex; align-items: center; gap: 10px; }
+  header .brand { font-weight: 800; letter-spacing: .3px; font-size: 1.05rem; }
+  header .brand small { display: block; font-weight: 500; opacity: .8; font-size: .72rem; letter-spacing: 0; }
+  header .spacer { flex: 1; }
+  .sync { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.14); border: 0; color: #fff;
+          border-radius: 999px; padding: 6px 11px; font-size: .78rem; font-weight: 700; cursor: pointer; }
+  .sync .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .sync.wait .dot { background: #ffcf5c; } .sync.off .dot { background: #ff8a80; }
+  .icon-btn { background: rgba(255,255,255,.14); border: 0; color: #fff; border-radius: 9px; width: 36px; height: 34px; cursor: pointer; display: grid; place-items: center; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 14px; }
+  h2 { font-size: 1.05rem; margin: 4px 0 10px; }
+  .hint { color: var(--muted); font-size: .82rem; line-height: 1.45; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+
+  .search { position: relative; margin-bottom: 10px; }
+  .search input, .search input[type=text] { width: 100%; padding: 12px 12px 12px 38px; border: 1px solid var(--line); border-radius: 10px; background: #fff; font-size: 16px; }
+  .search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #8a96a3; }
+
+  .list { display: flex; flex-direction: column; gap: 8px; }
+  .row { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; background: #fff; border: 1px solid var(--line);
+         border-radius: 10px; padding: 11px 12px; text-align: left; width: 100%; cursor: pointer; }
+  .row:active { background: var(--teal-l); }
+  .row .num { font-weight: 800; color: var(--teal); font-variant-numeric: tabular-nums; }
+  .row .nm { font-size: .9rem; overflow: hidden; text-overflow: ellipsis; }
+  .row .nm small { display: block; color: var(--muted); font-size: .74rem; margin-top: 1px; }
+  .pill { font-size: .7rem; font-weight: 700; border-radius: 999px; padding: 3px 8px; white-space: nowrap; }
+  .pill.ok { background: #e3f4ea; color: var(--green); } .pill.new { background: var(--teal-l); color: var(--teal); }
+  .pill.wait { background: #fff3d6; color: var(--amber); } .pill.err { background: #fde8e6; color: var(--red); }
+  .section { font-size: .76rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin: 14px 2px 4px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 10px; padding: 12px 16px;
+         font-weight: 700; cursor: pointer; font-size: .95rem; }
+  .btn-primary { background: var(--teal); color: #fff; } .btn-primary:active { background: var(--teal-d); }
+  .btn-light { background: #e9eef2; color: var(--ink); }
+  .btn-danger { background: #fde8e6; color: var(--red); }
+  .btn:disabled { opacity: .55; cursor: wait; }
+  .btn.block { width: 100%; }
+
+  .proj-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+  .proj-head .t { flex: 1; min-width: 0; }
+  .proj-head .n { font-size: 1.25rem; font-weight: 800; color: var(--teal); }
+  .proj-head .s { color: var(--muted); font-size: .85rem; }
+  .proj-head a { color: var(--teal); font-weight: 700; font-size: .8rem; text-decoration: none; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .stat { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+  .stat b { display: block; font-size: 1.25rem; color: var(--teal); }
+  .stat span { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+  .filters { display: flex; gap: 8px; margin-bottom: 4px; }
+  .filters .search { flex: 1; margin: 0; }
+  .filters select { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 0 10px; max-width: 42%; font-size: 15px; }
+
+  .item { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; cursor: pointer; display: flex; gap: 10px; }
+  .item:active { background: var(--teal-l); }
+  .item .thumb { width: 52px; height: 52px; border-radius: 8px; background: #e9eef2 center/cover no-repeat; flex: 0 0 auto; }
+  .item .body { flex: 1; min-width: 0; }
+  .item .title { font-weight: 700; font-size: .92rem; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .item .meta { color: var(--muted); font-size: .78rem; margin-top: 3px; line-height: 1.4; }
+  .item .qty { font-weight: 800; color: var(--teal); font-variant-numeric: tabular-nums; }
+
+  .fab { position: fixed; right: 16px; bottom: calc(env(safe-area-inset-bottom) + 16px); z-index: 15; border-radius: 999px;
+         box-shadow: 0 6px 18px rgba(0,0,0,.22); padding: 14px 20px; }
+
+  .sheet-bg { position: fixed; inset: 0; background: rgba(15,25,35,.45); z-index: 40; display: flex; align-items: flex-end; justify-content: center; }
+  .sheet { background: #fff; width: 100%; max-width: 640px; max-height: 94vh; overflow-y: auto; border-radius: 16px 16px 0 0;
+           padding: 16px 16px calc(env(safe-area-inset-bottom) + 16px); -webkit-overflow-scrolling: touch; }
+  @media (min-width: 700px) { .sheet-bg { align-items: center; } .sheet { border-radius: 16px; } }
+  .sheet h3 { margin: 0 0 12px; font-size: 1.1rem; color: var(--teal); }
+  label { display: block; font-size: .8rem; font-weight: 700; color: #3c4855; margin: 10px 0 4px; }
+  label .opt { font-weight: 400; color: #8a96a3; }
+  input[type=text], input[type=number], input[type=password], textarea, select.f {
+    width: 100%; padding: 11px 12px; border: 1px solid #cfd7de; border-radius: 9px; background: #fff; font-size: 16px; color: var(--ink); }
+  textarea { min-height: 70px; resize: vertical; }
+  input:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--teal); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+  .with-scan { display: flex; gap: 6px; }
+  .with-scan input { flex: 1; }
+  .scan { flex: 0 0 auto; width: 46px; border: 0; border-radius: 9px; background: var(--teal); color: #fff; display: grid; place-items: center; cursor: pointer; }
+  .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(74px, 1fr)); gap: 8px; margin-top: 8px; }
+  .photos:empty { display: none; }
+  .ph { position: relative; aspect-ratio: 1; border-radius: 8px; background: #e9eef2 center/cover no-repeat; }
+  .ph.new { outline: 2px solid var(--accent); }
+  .ph button { position: absolute; top: 3px; right: 3px; width: 24px; height: 24px; border-radius: 50%; border: 0; background: rgba(0,0,0,.6); color: #fff; cursor: pointer; }
+  .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .actions .btn { flex: 1; }
+  .err-text { color: var(--red); font-size: .82rem; margin-top: 8px; min-height: 1em; }
+
+  #toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 84px); transform: translateX(-50%) translateY(20px);
+           background: var(--green); color: #fff; padding: 11px 16px; border-radius: 10px; font-weight: 600; font-size: .88rem; z-index: 60;
+           opacity: 0; transition: .25s; max-width: 92vw; text-align: center; pointer-events: none; }
+  #toast.show { opacity: 1; transform: translateX(-50%); }
+
+  #scanBg .sheet { background: #000; color: #fff; }
+  #scanner { width: 100%; border-radius: 10px; overflow: hidden; background: #111; min-height: 240px; }
+  .empty { text-align: center; color: var(--muted); padding: 28px 10px; font-size: .9rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="icon-btn hidden" id="backBtn" onclick="showProjects()" aria-label="Back to projects">
+    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <div class="brand">HSG Inventory<small id="headSub">v1.0</small></div>
+  <div class="spacer"></div>
+  <button class="sync" id="syncBtn" onclick="openQueue()"><span class="dot"></span><span id="syncTxt">Synced</span></button>
+  <button class="icon-btn" onclick="openSettings()" aria-label="Settings">
+    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+  </button>
+</header>
+
+<main>
+  <!-- Projects -->
+  <section id="viewProjects">
+    <h2>Pick a project</h2>
+    <div class="search">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="projSearch" placeholder="Project number, name, or facility" autocomplete="off" oninput="renderProjects()">
+    </div>
+    <p class="hint" id="projStatus"></p>
+    <div class="list" id="projList"></div>
+  </section>
+
+  <!-- One project's inventory -->
+  <section id="viewProject" class="hidden">
+    <div class="proj-head">
+      <div class="t">
+        <div class="n" id="pNum"></div>
+        <div class="s" id="pName"></div>
+        <a id="pLink" target="_blank" rel="noopener">Open board in monday.com ›</a>
+      </div>
+      <button class="btn btn-light" onclick="refreshItems(true)" aria-label="Refresh">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0114.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0020.5 15"/></svg>
+      </button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="sLines">0</b><span>Line items</span></div>
+      <div class="stat"><b id="sUnits">0</b><span>Units</span></div>
+      <div class="stat"><b id="sDepts">0</b><span>Departments</span></div>
+    </div>
+    <div class="filters">
+      <div class="search">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="itemSearch" placeholder="Search tags, make, model, room" autocomplete="off" oninput="renderItems()">
+      </div>
+      <select id="deptFilter" onchange="renderItems()"><option value="">All departments</option></select>
+    </div>
+    <p class="hint" id="itemsStatus"></p>
+    <div id="itemList"></div>
+    <div style="height:90px"></div>
+    <button class="btn btn-primary fab" onclick="openItem()">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.6"><path d="M12 5v14M5 12h14"/></svg>
+      Add Item
+    </button>
+  </section>
+</main>
+
+<!-- Create board -->
+<div class="sheet-bg hidden" id="createBg">
+  <div class="sheet">
+    <h3>Start this project's inventory</h3>
+    <p class="hint" id="createHint"></p>
+    <label>Board name</label>
+    <input type="text" id="createName" autocomplete="off">
+    <p class="hint" style="margin-top:4px">Keep the project number in parentheses — that's how the app finds the board again.</p>
+    <div class="err-text" id="createErr"></div>
+    <div class="actions">
+      <button class="btn btn-light" onclick="closeSheet('createBg')">Cancel</button>
+      <button class="btn btn-primary" id="createBtn" onclick="createBoard()">Create Board</button>
+    </div>
+  </div>
+</div>
+
+<!-- Item form -->
+<div class="sheet-bg hidden" id="itemBg">
+  <div class="sheet">
+    <h3 id="itemTitle">Add item</h3>
+    <label>Asset Tag # <span class="opt">(leave blank if untagged)</span></label>
+    <div class="with-scan"><input type="text" id="fAsset" autocomplete="off"><button class="scan" type="button" onclick="openScanner('fAsset')" aria-label="Scan asset tag"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg></button></div>
+    <div class="grid2">
+      <div><label>Biomed / HTM Tag</label>
+        <div class="with-scan"><input type="text" id="fHtm" autocomplete="off"><button class="scan" type="button" onclick="openScanner('fHtm')" aria-label="Scan HTM tag"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg></button></div></div>
+      <div><label>Inventory Tag</label>
+        <div class="with-scan"><input type="text" id="fInv" autocomplete="off"><button class="scan" type="button" onclick="openScanner('fInv')" aria-label="Scan inventory tag"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg></button></div></div>
+    </div>
+    <div class="grid2">
+      <div><label>Quantity</label><input type="number" id="fQty" min="1" step="1" value="1" inputmode="numeric"></div>
+      <div><label>Manufacturer</label><input type="text" id="fMfr" list="dlMfr" autocomplete="off"></div>
+    </div>
+    <label>Model</label><input type="text" id="fModel" autocomplete="off">
+    <label>Description</label><textarea id="fDesc" placeholder="What is it? e.g. Stretcher, ADA exam table"></textarea>
+    <label>Department</label><input type="text" id="fDept" list="dlDept" autocomplete="off" placeholder="Pick an existing one or type a new one">
+    <div class="grid2">
+      <div><label>Room Name</label><input type="text" id="fRoom" list="dlRoom" autocomplete="off"></div>
+      <div><label>Room Number</label><input type="text" id="fRoomNo" autocomplete="off"></div>
+    </div>
+    <label>Notes <span class="opt">(optional)</span></label><textarea id="fNotes"></textarea>
+    <label>Photos</label>
+    <div class="actions" style="margin-top:4px">
+      <button class="btn btn-primary" type="button" onclick="document.getElementById('camIn').click()">Take Photo</button>
+      <button class="btn btn-light" type="button" onclick="document.getElementById('libIn').click()">Add from Library</button>
+    </div>
+    <input type="file" id="camIn" accept="image/*" capture="environment" class="hidden" onchange="addPhotos(this)">
+    <input type="file" id="libIn" accept="image/*" multiple class="hidden" onchange="addPhotos(this)">
+    <p class="hint" id="photoHint" style="margin:6px 0 0"></p>
+    <div class="photos" id="photoGrid"></div>
+    <div class="err-text" id="itemErr"></div>
+    <div class="actions">
+      <button class="btn btn-light" onclick="closeSheet('itemBg')">Cancel</button>
+      <button class="btn btn-light" id="saveMoreBtn" onclick="saveItem(true)">Save &amp; Add Another</button>
+      <button class="btn btn-primary" onclick="saveItem(false)">Save</button>
+    </div>
+    <button class="btn btn-danger block hidden" id="delBtn" style="margin-top:10px" onclick="deleteItem()">Remove from inventory</button>
+  </div>
+</div>
+<datalist id="dlDept"></datalist><datalist id="dlRoom"></datalist><datalist id="dlMfr"></datalist>
+
+<!-- Settings -->
+<div class="sheet-bg hidden" id="setBg">
+  <div class="sheet">
+    <h3>Settings</h3>
+    <label>Your name <span class="opt">(shown as Entered By on the board)</span></label>
+    <input type="text" id="sName" autocomplete="name">
+    <div class="actions">
+      <button class="btn btn-light" onclick="refreshProjects(true); closeSheet('setBg')">Refresh project list</button>
+    </div>
+    <details style="margin-top:14px">
+      <summary class="hint" style="cursor:pointer">Advanced</summary>
+      <label>Relay URL</label>
+      <input type="text" id="sRelay" autocomplete="off">
+      <p class="hint">Only change this if your administrator tells you to.</p>
+    </details>
+    <div class="err-text" id="setErr"></div>
+    <div class="actions">
+      <button class="btn btn-primary block" onclick="saveSettings()">Save</button>
+    </div>
+    <p class="hint" style="text-align:center;margin-top:12px" id="verLine"></p>
+  </div>
+</div>
+
+<!-- Waiting to send -->
+<div class="sheet-bg hidden" id="queueBg">
+  <div class="sheet">
+    <h3>Waiting to send</h3>
+    <p class="hint" id="queueHint"></p>
+    <div class="list" id="queueList"></div>
+    <div class="actions">
+      <button class="btn btn-light" onclick="closeSheet('queueBg')">Close</button>
+      <button class="btn btn-primary" onclick="syncNow(true)">Send now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scanner -->
+<div class="sheet-bg hidden" id="scanBg">
+  <div class="sheet">
+    <h3 style="color:#fff">Scan barcode</h3>
+    <div id="scanner"></div>
+    <p class="hint" id="scanMsg" style="color:#ccc"></p>
+    <div class="actions"><button class="btn btn-light" onclick="closeScanner()">Cancel</button></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function() {
+'use strict';
+
+/* ================= configuration ================= */
+var VERSION = 'v1.0';
+var DEFAULT_RELAY = 'https://hsg-inventory-proxy.dkromis.workers.dev';
+var TRACKER_BOARD = '324971863';                 // ACTIVE Project Tracker
+var TRACKER_COLS = { name: 'long_text_mkpta4n7', facility: 'owner', status: 'project_status', office: 'color_mknrrke4' };
+var INV_WORKSPACE = '9671127';                   // Projects Administration
+var INV_FOLDER = '21855151';                     // HSG Project Inventories
+var TEMPLATE_BOARD = '18438704564';              // INVENTORY TEMPLATE (fallback if not found by name)
+var BOARD_URL = 'https://hsginc.monday.com/boards/';
+// Column ids on the INVENTORY TEMPLATE (fixed ids, safe to rename in monday.com)
+var COL = { asset: 'asset_tag', htm: 'htm_tag', inv: 'inventory_tag', qty: 'qty', mfr: 'manufacturer', model: 'model',
+            desc: 'description', dept: 'department', room: 'room_name', roomNo: 'room_number', photos: 'photos',
+            notes: 'notes', by: 'entered_by', date: 'date_entered' };
+var READ_COLS = [COL.asset, COL.htm, COL.inv, COL.qty, COL.mfr, COL.model, COL.desc, COL.dept, COL.room, COL.roomNo, COL.notes, COL.by, COL.date];
+var MAX_PHOTO_DIM = 1600, PHOTO_QUALITY = 0.8;
+
+/* ================= small helpers ================= */
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function lsGet(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function sameNum(a, b) { return String(a || '').replace(/\D/g, '') === String(b || '').replace(/\D/g, '') && String(a || '').replace(/\D/g, '') !== ''; }
+function toast(msg, color, ms) {
+  var t = $('toast'); t.textContent = msg; t.style.background = color || 'var(--green)'; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(function() { t.classList.remove('show'); }, ms || 2600);
+}
+function closeSheet(id) { $(id).classList.add('hidden'); }
+function settings() { return lsGet('hsginv_settings', {}); }
+function relay() { return (settings().relay || DEFAULT_RELAY).replace(/\/+$/, ''); }
+
+/* ================= monday.com through the relay ================= */
+function gql(query, variables) {
+  return fetch(relay(), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: query, variables: variables || {} }) })
+    .catch(function() { var e = new Error('No connection'); e.offline = true; throw e; })
+    .then(function(r) {
+      return r.json().catch(function() { return {}; }).then(function(d) {
+        if (d.errors && d.errors.length) throw new Error(d.errors[0].message || 'monday.com error');
+        if (d.error_message) throw new Error(d.error_message);
+        if (!r.ok) throw new Error('monday.com error (' + r.status + ')');
+        return d.data || {};
+      });
+    });
+}
+
+function uploadPhoto(itemId, blob, name) {
+  var fd = new FormData();
+  fd.append('query', 'mutation ($file: File!) { add_file_to_column (item_id: ' + Number(itemId) + ', column_id: "' + COL.photos + '", file: $file) { id } }');
+  fd.append('variables[file]', blob, name);
+  return fetch(relay(), { method: 'POST', body: fd })
+    .catch(function() { var e = new Error('No connection'); e.offline = true; throw e; })
+    .then(function(r) {
+      return r.json().catch(function() { return {}; }).then(function(d) {
+        if (d.errors && d.errors.length) throw new Error(d.errors[0].message || 'Photo upload failed');
+        if (d.error_message) throw new Error(d.error_message);
+        if (!r.ok) throw new Error('Photo upload failed (' + r.status + ')');
+        return d.data;
+      });
+    });
+}
+
+/* ================= offline queue (IndexedDB) ================= */
+var db = null;
+function dbOpen() {
+  if (db) return Promise.resolve(db);
+  return new Promise(function(res, rej) {
+    var r = indexedDB.open('hsg_inventory', 1);
+    r.onupgradeneeded = function() { r.result.createObjectStore('queue', { keyPath: 'qid' }); };
+    r.onsuccess = function() { db = r.result; res(db); };
+    r.onerror = function() { rej(r.error); };
+  });
+}
+function qAll() {
+  return dbOpen().then(function(d) { return new Promise(function(res, rej) {
+    var r = d.transaction('queue').objectStore('queue').getAll();
+    r.onsuccess = function() { res((r.result || []).sort(function(a, b) { return a.created - b.created; })); };
+    r.onerror = function() { rej(r.error); };
+  }); });
+}
+function qWrite(fn) {
+  return dbOpen().then(function(d) { return new Promise(function(res, rej) {
+    var t = d.transaction('queue', 'readwrite'); fn(t.objectStore('queue'));
+    t.oncomplete = function() { res(); };
+    t.onerror = t.onabort = function() { rej(t.error || new Error('Could not save on this phone — storage may be full')); };
+  }); });
+}
+function qPut(rec) { return qWrite(function(s) { s.put(rec); }); }
+function qDel(qid) { return qWrite(function(s) { s.delete(qid); }); }
+
+/* ================= projects ================= */
+var projects = lsGet('hsginv_projects', { at: 0, list: [] });
+var folderBoards = lsGet('hsginv_folder', []);          // [{id, name, num}]
+
+function boardNum(name) {
+  var m = /\(\s*([0-9][0-9\-]*)\s*\)/.exec(name || ''); if (m) return m[1];
+  m = /([0-9]{5,})/.exec(name || ''); return m ? m[1] : '';
+}
+function isTemplate(name) { return /\btemplate\b/i.test(name || ''); }
+
+function refreshProjects(force) {
+  if (!force && projects.list.length && Date.now() - projects.at < 30 * 60 * 1000) { renderProjects(); return Promise.resolve(); }
+  $('projStatus').textContent = projects.list.length ? 'Updating project list…' : 'Loading projects from monday.com…';
+  var cols = [TRACKER_COLS.name, TRACKER_COLS.facility, TRACKER_COLS.status, TRACKER_COLS.office];
+  var f = 'cursor items { id name group { title } column_values(ids: $c) { id text } }';
+  var out = [];
+  function take(page) {
+    (page.items || []).forEach(function(it) {
+      var v = function(id) { var x = (it.column_values || []).find(function(c) { return c.id === id; }); return (x && x.text) || ''; };
+      if (!(it.name || '').trim()) return;
+      out.push({ num: it.name.trim(), name: v(TRACKER_COLS.name).trim(), facility: v(TRACKER_COLS.facility), status: v(TRACKER_COLS.status),
+                 office: v(TRACKER_COLS.office), group: it.group ? it.group.title : '' });
+    });
+    if (!page.cursor || out.length > 5000) return null;
+    return gql('query($k: String!, $c: [String!]) { next_items_page(limit: 500, cursor: $k) { ' + f + ' } }', { k: page.cursor, c: cols })
+      .then(function(d) { return take(d.next_items_page); });
+  }
+  return Promise.all([
+    gql('query($b: [ID!], $c: [String!]) { boards(ids: $b) { items_page(limit: 500) { ' + f + ' } } }', { b: [TRACKER_BOARD], c: cols })
+      .then(function(d) { return take(d.boards[0].items_page); }),
+    refreshFolder()
+  ]).then(function() {
+    projects = { at: Date.now(), list: out }; lsSet('hsginv_projects', projects);
+    renderProjects();
+  }).catch(function(e) {
+    $('projStatus').textContent = e.offline ? 'No connection — showing the saved project list.' : 'Could not load projects: ' + e.message;
+    renderProjects();
+  });
+}
+
+function refreshFolder() {
+  return gql('query($f: [ID!]) { folders(ids: $f) { children { id name } } }', { f: [INV_FOLDER] }).then(function(d) {
+    var kids = (d.folders && d.folders[0] && d.folders[0].children) || [];
+    folderBoards = kids.filter(function(b) { return b && b.name && !/^subitems of/i.test(b.name); })
+      .map(function(b) { return { id: String(b.id), name: b.name, num: boardNum(b.name) }; });
+    lsSet('hsginv_folder', folderBoards);
+    return folderBoards;
+  });
+}
+function boardForNum(num) { return folderBoards.find(function(b) { return !isTemplate(b.name) && sameNum(b.num, num); }) || null; }
+
+var projShown = [];
+function renderProjects() {
+  var q = $('projSearch').value.trim().toLowerCase();
+  var rank = { 'Active': 0 };
+  var list = projects.list.filter(function(p) {
+    if (q) return (p.num + ' ' + p.name + ' ' + p.facility + ' ' + p.office).toLowerCase().indexOf(q) > -1;
+    return p.group === 'Active Projects' || !!boardForNum(p.num);
+  }).sort(function(a, b) {
+    var ia = boardForNum(a.num) ? 0 : 1, ib = boardForNum(b.num) ? 0 : 1;
+    if (ia !== ib) return ia - ib;
+    return (rank[a.status] == null ? 1 : 0) - (rank[b.status] == null ? 1 : 0) || b.num.localeCompare(a.num, undefined, { numeric: true });
+  }).slice(0, 80);
+  projShown = list;
+  if (!$('projStatus').textContent || /Updating|Loading/.test($('projStatus').textContent) && projects.at) {
+    $('projStatus').textContent = q ? '' : 'Your inventories first, then active projects. Search to find any project on the tracker.';
+  }
+  $('projList').innerHTML = list.length ? list.map(function(p, i) {
+    var b = boardForNum(p.num);
+    var sub = [p.facility, p.office, p.status && p.status !== 'Active' ? p.status : ''].filter(Boolean).map(esc).join(' · ');
+    return '<button class="row" onclick="pickProject(' + i + ')"><span class="num">' + esc(p.num) + '</span>'
+      + '<span class="nm">' + (esc(p.name) || '<i>No name</i>') + (sub ? '<small>' + sub + '</small>' : '') + '</span>'
+      + (b ? '<span class="pill ok">Inventory</span>' : '<span class="pill new">Start</span>') + '</button>';
+  }).join('') : '<div class="empty">' + (projects.list.length ? 'No project matches that search.' : 'No projects loaded yet.') + '</div>';
+}
+
+/* ================= current project ================= */
+var cur = lsGet('hsginv_current', null);   // {num, name, facility, boardId, boardName}
+var items = [];                            // items on the board (cached)
+var pending = [];                          // queue records for this board
+
+function pickProject(i) {
+  var p = projShown[i]; if (!p) return;
+  var b = boardForNum(p.num);
+  var go = function(board) {
+    cur = { num: p.num, name: p.name, facility: p.facility, boardId: board.id, boardName: board.name };
+    lsSet('hsginv_current', cur); showProject();
+  };
+  if (b) {
+    // confirm it still exists when online; offline, trust the saved list
+    refreshFolder().then(function() {
+      var nb = boardForNum(p.num);
+      if (nb) go(nb); else offerCreate(p);
+    }).catch(function() { go(b); });
+    return;
+  }
+  refreshFolder().then(function() {
+    var nb = boardForNum(p.num);
+    if (nb) go(nb); else offerCreate(p);
+  }).catch(function(e) {
+    toast(e.offline ? 'Connect to the internet once to set up this project\'s inventory board' : e.message, 'var(--red)', 6000);
+  });
+}
+
+var createFor = null;
+function offerCreate(p) {
+  createFor = p;
+  $('createHint').textContent = 'There\'s no inventory board for ' + p.num + ' yet. This creates one in Projects Administration → HSG Project Inventories, copied from the INVENTORY TEMPLATE.';
+  $('createName').value = (p.name ? p.name + ' ' : '') + '(' + p.num + ')';
+  $('createErr').textContent = '';
+  $('createBg').classList.remove('hidden');
+}
+
+function createBoard() {
+  var p = createFor; if (!p) return;
+  var name = $('createName').value.trim();
+  if (!sameNum(boardNum(name), p.num)) { $('createErr').textContent = 'Keep (' + p.num + ') in the board name.'; return; }
+  var btn = $('createBtn'); btn.disabled = true; btn.textContent = 'Creating…'; $('createErr').textContent = '';
+  refreshFolder().then(function() {
+    var existing = boardForNum(p.num);
+    if (existing) return existing;
+    var tpl = folderBoards.find(function(b) { return isTemplate(b.name); });
+    return gql('mutation($id: ID!, $name: String!, $ws: ID, $folder: ID) { duplicate_board(board_id: $id, duplicate_type: duplicate_board_with_structure, '
+      + 'board_name: $name, workspace_id: $ws, folder_id: $folder, keep_subscribers: false) { board { id name } } }',
+      { id: tpl ? tpl.id : TEMPLATE_BOARD, name: name, ws: INV_WORKSPACE, folder: INV_FOLDER })
+      .then(function(d) {
+        var nb = d.duplicate_board && d.duplicate_board.board;
+        if (!nb || !nb.id) throw new Error('monday.com did not return the new board');
+        var board = { id: String(nb.id), name: nb.name || name, num: p.num };
+        folderBoards.push(board); lsSet('hsginv_folder', folderBoards);
+        return finishNewBoard(board, p).then(function() { return board; });
+      });
+  }).then(function(board) {
+    closeSheet('createBg');
+    cur = { num: p.num, name: p.name, facility: p.facility, boardId: board.id, boardName: board.name };
+    lsSet('hsginv_current', cur); showProject();
+    toast('Inventory board ready — ' + board.name);
+  }).catch(function(e) {
+    $('createErr').textContent = e.offline ? 'No connection. Try again when you have signal.' : 'Could not create the board: ' + e.message;
+  }).then(function() { btn.disabled = false; btn.textContent = 'Create Board'; });
+}
+
+// Description, plus the "By Department" view if the copy didn't bring it along.
+function finishNewBoard(board, p) {
+  var jobs = [
+    gql('mutation($b: ID!, $v: String!) { update_board(board_id: $b, board_attribute: description, new_value: $v) }',
+        { b: board.id, v: 'Equipment inventory for ' + p.num + (p.name ? ' ' + p.name : '') + (p.facility ? ' — ' + p.facility : '') + '. Entered with the HSG Inventory app.' })
+      .catch(function() {}),
+    gql('query($b: [ID!]) { boards(ids: $b) { views { name } } }', { b: [board.id] }).then(function(d) {
+      var views = (d.boards && d.boards[0] && d.boards[0].views) || [];
+      if (views.some(function(v) { return /department/i.test(v.name || ''); })) return;
+      return gql('mutation($b: ID!) { create_view_table(board_id: $b, name: "By Department", settings: { group_by: { conditions: [{ columnId: "'
+        + COL.dept + '", config: { sortSettings: { direction: ASC } } }], hideEmptyGroups: true } }) { id } }', { b: board.id });
+    }).catch(function() {})
+  ];
+  return Promise.all(jobs);
+}
+
+function showProjects() {
+  $('viewProject').classList.add('hidden'); $('viewProjects').classList.remove('hidden'); $('backBtn').classList.add('hidden');
+  $('headSub').textContent = VERSION;
+  renderProjects();
+}
+
+function showProject() {
+  if (!cur) return showProjects();
+  $('viewProjects').classList.add('hidden'); $('viewProject').classList.remove('hidden'); $('backBtn').classList.remove('hidden');
+  $('pNum').textContent = cur.num;
+  $('pName').textContent = [cur.name, cur.facility].filter(Boolean).join(' — ');
+  $('pLink').href = BOARD_URL + cur.boardId;
+  $('headSub').textContent = cur.num + ' · ' + VERSION;
+  items = lsGet('hsginv_items_' + cur.boardId, []);
+  $('itemSearch').value = ''; $('deptFilter').value = '';
+  loadPending().then(renderItems);
+  refreshItems(false);
+}
+
+function refreshItems(manual) {
+  if (!cur) return;
+  var boardId = cur.boardId;
+  $('itemsStatus').textContent = 'Updating from monday.com…';
+  var f = 'cursor items { id name column_values(ids: $c) { id text } assets { id public_url } }';
+  var out = [];
+  function take(page) {
+    (page.items || []).forEach(function(it) {
+      var v = function(id) { var x = (it.column_values || []).find(function(c) { return c.id === id; }); return (x && x.text) || ''; };
+      out.push({ id: String(it.id), name: it.name, asset: v(COL.asset), htm: v(COL.htm), inv: v(COL.inv), qty: v(COL.qty), mfr: v(COL.mfr),
+        model: v(COL.model), desc: v(COL.desc), dept: v(COL.dept), room: v(COL.room), roomNo: v(COL.roomNo), notes: v(COL.notes),
+        by: v(COL.by), date: v(COL.date), photos: (it.assets || []).map(function(a) { return a.public_url; }).filter(Boolean) });
+    });
+    if (!page.cursor || out.length > 10000) return null;
+    return gql('query($k: String!, $c: [String!]) { next_items_page(limit: 500, cursor: $k) { ' + f + ' } }', { k: page.cursor, c: READ_COLS })
+      .then(function(d) { return take(d.next_items_page); });
+  }
+  return gql('query($b: [ID!], $c: [String!]) { boards(ids: $b) { name items_page(limit: 500) { ' + f + ' } } }', { b: [boardId], c: READ_COLS })
+    .then(function(d) {
+      var bd = d.boards && d.boards[0];
+      if (!bd) { var e = new Error('This inventory board no longer exists in monday.com'); e.gone = true; throw e; }
+      return take(bd.items_page);
+    })
+    .then(function() {
+      if (!cur || cur.boardId !== boardId) return;
+      items = out;
+      // photo links expire, so keep the cached copy without them
+      lsSet('hsginv_items_' + boardId, out.map(function(x) { var y = Object.assign({}, x); y.photoCount = x.photos.length; y.photos = []; return y; }));
+      $('itemsStatus').textContent = '';
+      renderItems();
+      if (manual) toast('Up to date');
+    })
+    .catch(function(e) {
+      if (e.gone) {
+        folderBoards = folderBoards.filter(function(b) { return b.id !== boardId; }); lsSet('hsginv_folder', folderBoards);
+        lsSet('hsginv_current', null); cur = null; showProjects();
+        toast('That inventory board was deleted in monday.com — pick the project again to start a new one', 'var(--red)', 8000);
+        return;
+      }
+      $('itemsStatus').textContent = e.offline ? 'No connection — showing what this phone last saw. New items are kept and sent when you\'re back online.' : 'Could not refresh: ' + e.message;
+    });
+}
+
+function loadPending() {
+  return qAll().then(function(all) { pending = cur ? all.filter(function(r) { return r.boardId === cur.boardId; }) : []; })
+    .catch(function() { pending = []; });
+}
+
+function displayRows() {
+  // board items, with any pending edits applied, plus items not yet sent
+  var rows = items.map(function(x) {
+    var p = pending.filter(function(r) { return r.itemId === x.id; });
+    if (p.some(function(r) { return r.kind === 'archive'; })) return null;
+    var y = Object.assign({}, x, { _pending: p.length > 0, _err: p.some(function(r) { return r.error; }) });
+    p.forEach(function(r) { if (r.fields) Object.assign(y, r.fields); y._newPhotos = (y._newPhotos || 0) + ((r.photos || []).length - (r.photosDone || 0)); });
+    return y;
+  }).filter(Boolean);
+  pending.filter(function(r) { return r.kind === 'create' && !items.some(function(x) { return x.id === r.itemId; }); }).forEach(function(r) {
+    rows.push(Object.assign({ id: null, qid: r.qid, photos: [], _pending: true, _err: !!r.error, _newPhotos: (r.photos || []).length - (r.photosDone || 0) }, r.fields));
+  });
+  return rows;
+}
+
+function qtyOf(x) { var n = parseInt(x.qty, 10); return n > 0 ? n : 1; }
+function titleOf(x) { return x.asset || [x.mfr, x.model].filter(Boolean).join(' ') || (x.desc || '').slice(0, 60) || 'Item'; }
+
+var shownRows = [];
+function renderItems() {
+  var rows = displayRows();
+  var depts = {}, rooms = {}, mfrs = {};
+  rows.forEach(function(x) { if (x.dept) depts[x.dept] = 1; if (x.room) rooms[x.room] = 1; if (x.mfr) mfrs[x.mfr] = 1; });
+  var dsel = $('deptFilter'), dv = dsel.value;
+  dsel.innerHTML = '<option value="">All departments</option>' + Object.keys(depts).sort().map(function(d) { return '<option' + (d === dv ? ' selected' : '') + '>' + esc(d) + '</option>'; }).join('');
+  $('dlDept').innerHTML = Object.keys(depts).sort().map(function(d) { return '<option value="' + esc(d) + '">'; }).join('');
+  $('dlRoom').innerHTML = Object.keys(rooms).sort().map(function(d) { return '<option value="' + esc(d) + '">'; }).join('');
+  $('dlMfr').innerHTML = Object.keys(mfrs).sort().map(function(d) { return '<option value="' + esc(d) + '">'; }).join('');
+
+  $('sLines').textContent = rows.length;
+  $('sUnits').textContent = rows.reduce(function(n, x) { return n + qtyOf(x); }, 0);
+  $('sDepts').textContent = Object.keys(depts).length;
+
+  var q = $('itemSearch').value.trim().toLowerCase(), df = dsel.value;
+  var list = rows.filter(function(x) {
+    if (df && x.dept !== df) return false;
+    if (!q) return true;
+    return [x.asset, x.htm, x.inv, x.mfr, x.model, x.desc, x.dept, x.room, x.roomNo, x.notes].join(' ').toLowerCase().indexOf(q) > -1;
+  });
+  shownRows = list;
+  if (!list.length) {
+    $('itemList').innerHTML = '<div class="empty">' + (rows.length ? 'Nothing matches that search.' : 'No equipment yet. Tap <b>Add Item</b> to start.') + '</div>';
+    return;
+  }
+  var groups = {};
+  list.forEach(function(x, i) { var k = x.dept || 'No department'; (groups[k] = groups[k] || []).push(i); });
+  $('itemList').innerHTML = Object.keys(groups).sort(function(a, b) { return a === 'No department' ? 1 : b === 'No department' ? -1 : a.localeCompare(b); }).map(function(g) {
+    var units = groups[g].reduce(function(n, i) { return n + qtyOf(list[i]); }, 0);
+    return '<div class="section">' + esc(g) + ' · ' + units + ' unit' + (units === 1 ? '' : 's') + '</div><div class="list">' + groups[g].map(function(i) {
+      var x = list[i];
+      var tags = [x.htm ? 'HTM ' + esc(x.htm) : '', x.inv ? 'INV ' + esc(x.inv) : ''].filter(Boolean).join(' · ');
+      var where = [x.room, x.roomNo].filter(Boolean).map(esc).join(' ');
+      var nPh = (x.photos ? x.photos.length : 0) || x.photoCount || 0;
+      var meta = [x.asset ? [x.mfr, x.model].filter(Boolean).map(esc).join(' ') : (x.desc && (x.mfr || x.model) ? esc(x.desc.slice(0, 50)) : ''), tags, where,
+                  nPh + (x._newPhotos > 0 ? x._newPhotos : 0) ? (nPh + Math.max(0, x._newPhotos || 0)) + ' photo' + (nPh + Math.max(0, x._newPhotos || 0) === 1 ? '' : 's') : ''].filter(Boolean).join('<br>');
+      var thumb = x.photos && x.photos[0] ? ' style="background-image:url(\'' + esc(x.photos[0]) + '\')"' : '';
+      return '<div class="item" onclick="openItem(' + i + ')"><div class="thumb"' + thumb + '></div><div class="body">'
+        + '<div class="title"><span class="qty">' + qtyOf(x) + '×</span> ' + esc(titleOf(x))
+        + (x._err ? ' <span class="pill err">Not sent</span>' : x._pending ? ' <span class="pill wait">Waiting to send</span>' : '') + '</div>'
+        + (meta ? '<div class="meta">' + meta + '</div>' : '') + '</div></div>';
+    }).join('') + '</div>';
+  }).join('');
+}
+
+/* ================= add / edit item ================= */
+var editing = null;      // {id, qid} of the item being edited, or null for a new one
+var newPhotos = [];      // [{blob, url}]
+
+function openItem(i) {
+  if (!settings().name) { openSettings(true); return; }
+  var x = typeof i === 'number' ? shownRows[i] : null;
+  editing = x ? { id: x.id, qid: x.qid || null } : null;
+  newPhotos.forEach(function(p) { URL.revokeObjectURL(p.url); }); newPhotos = [];
+  $('itemTitle').textContent = x ? 'Edit item' : 'Add item';
+  $('saveMoreBtn').classList.toggle('hidden', !!x);
+  $('delBtn').classList.toggle('hidden', !x);
+  var keep = !x && lastLocation ? lastLocation : {};
+  var v = x || {};
+  $('fAsset').value = v.asset || ''; $('fHtm').value = v.htm || ''; $('fInv').value = v.inv || '';
+  $('fQty').value = x ? qtyOf(x) : 1; $('fMfr').value = v.mfr || ''; $('fModel').value = v.model || ''; $('fDesc').value = v.desc || '';
+  $('fDept').value = x ? (v.dept || '') : (keep.dept || ''); $('fRoom').value = x ? (v.room || '') : (keep.room || '');
+  $('fRoomNo').value = x ? (v.roomNo || '') : (keep.roomNo || ''); $('fNotes').value = v.notes || '';
+  existingPhotos = x && x.photos ? x.photos.slice() : [];
+  existingCount = x ? ((x.photos && x.photos.length) || x.photoCount || 0) : 0;
+  renderPhotos();
+  $('itemErr').textContent = '';
+  $('itemBg').classList.remove('hidden');
+  if (!x) setTimeout(function() { $('fAsset').focus(); }, 80);
+}
+var existingPhotos = [], existingCount = 0, lastLocation = null;
+
+function renderPhotos() {
+  $('photoGrid').innerHTML = existingPhotos.map(function(u) { return '<div class="ph" style="background-image:url(\'' + esc(u) + '\')"></div>'; }).join('')
+    + newPhotos.map(function(p, i) { return '<div class="ph new" style="background-image:url(\'' + p.url + '\')"><button type="button" onclick="dropPhoto(' + i + ')" aria-label="Remove photo">✕</button></div>'; }).join('');
+  var parts = [];
+  if (existingCount) parts.push(existingCount + ' already on the board');
+  if (newPhotos.length) parts.push(newPhotos.length + ' new — sent when you save');
+  $('photoHint').textContent = parts.join(' · ') || 'Add one or more photos of the item and its tag.';
+}
+function dropPhoto(i) { URL.revokeObjectURL(newPhotos[i].url); newPhotos.splice(i, 1); renderPhotos(); }
+
+function addPhotos(input) {
+  var files = Array.prototype.slice.call(input.files || []);   // copy BEFORE clearing the input
+  input.value = '';
+  if (!files.length) return;
+  $('photoHint').textContent = 'Processing ' + files.length + ' photo' + (files.length > 1 ? 's' : '') + '…';
+  files.reduce(function(p, f) {
+    return p.then(function() { return shrink(f).then(function(blob) { newPhotos.push({ blob: blob, url: URL.createObjectURL(blob) }); })
+      .catch(function() { toast('A photo couldn\'t be read', 'var(--red)'); }); });
+  }, Promise.resolve()).then(renderPhotos);
+}
+
+function shrink(file) {
+  return new Promise(function(res, rej) {
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function() {
+      var w = img.naturalWidth, h = img.naturalHeight, s = Math.min(1, MAX_PHOTO_DIM / Math.max(w, h));
+      var c = document.createElement('canvas'); c.width = Math.round(w * s); c.height = Math.round(h * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+      c.toBlob(function(b) { b ? res(b) : rej(new Error('convert')); }, 'image/jpeg', PHOTO_QUALITY);
+    };
+    img.onerror = function() { URL.revokeObjectURL(url); rej(new Error('read')); };
+    img.src = url;
+  });
+}
+
+function readForm() {
+  return { asset: $('fAsset').value.trim(), htm: $('fHtm').value.trim(), inv: $('fInv').value.trim(), qty: String(parseInt($('fQty').value, 10) || ''),
+           mfr: $('fMfr').value.trim(), model: $('fModel').value.trim(), desc: $('fDesc').value.trim(), dept: $('fDept').value.trim(),
+           room: $('fRoom').value.trim(), roomNo: $('fRoomNo').value.trim(), notes: $('fNotes').value.trim() };
+}
+
+function columnValues(f, isNew) {
+  var v = {};
+  v[COL.asset] = f.asset; v[COL.htm] = f.htm; v[COL.inv] = f.inv; v[COL.qty] = String(f.qty || 1);
+  v[COL.mfr] = f.mfr; v[COL.model] = f.model; v[COL.desc] = { text: f.desc }; v[COL.dept] = f.dept;
+  v[COL.room] = f.room; v[COL.roomNo] = f.roomNo; v[COL.notes] = { text: f.notes };
+  if (isNew) { v[COL.by] = f.by || ''; v[COL.date] = { date: f.date || today() }; }
+  return v;
+}
+
+function saveItem(addAnother) {
+  var f = readForm();
+  var err = $('itemErr'); err.textContent = '';
+  if (!(f.asset || f.htm || f.inv || f.mfr || f.model || f.desc)) { err.textContent = 'Enter at least a tag, manufacturer, model, or description.'; return; }
+  var q = parseInt($('fQty').value, 10);
+  if (!(q >= 1)) { err.textContent = 'Quantity must be 1 or more.'; return; }
+  if (q > 1 && (f.asset || f.htm || f.inv) && !confirm('Quantity is ' + q + ' but there\'s a tag number. Tags usually identify one unit — tagged items are best entered one per line. Save anyway?')) return;
+  var rows = displayRows();
+  var self = editing;
+  var clash = null;
+  [['asset', 'Asset tag'], ['htm', 'Biomed / HTM tag'], ['inv', 'Inventory tag']].forEach(function(k) {
+    if (clash || !f[k[0]]) return;
+    var other = rows.find(function(x) { return x[k[0]] === f[k[0]] && !(self && ((self.id && x.id === self.id) || (self.qid && x.qid === self.qid))); });
+    if (other) clash = k[1] + ' ' + f[k[0]] + ' is already on "' + titleOf(other) + '".';
+  });
+  if (clash && !confirm(clash + ' Save anyway?')) return;
+
+  var photos = newPhotos.map(function(p) { return p.blob; });
+  var job;
+  if (!editing) {
+    f.by = settings().name; f.date = today();
+    job = qPut({ qid: 'q' + Date.now() + Math.random().toString(36).slice(2, 6), kind: 'create', boardId: cur.boardId, projectNum: cur.num,
+                 fields: f, photos: photos, photosDone: 0, itemId: null, created: Date.now(), error: '' });
+  } else {
+    var existingQ = pending.find(function(r) { return (editing.qid && r.qid === editing.qid) || (!editing.qid && r.kind === 'update' && r.itemId === editing.id && !r.error); });
+    if (existingQ && existingQ.kind === 'create' && !existingQ.itemId) {
+      Object.assign(existingQ.fields, f); existingQ.photos = (existingQ.photos || []).concat(photos);
+      job = qPut(existingQ);
+    } else {
+      job = qPut({ qid: 'q' + Date.now() + Math.random().toString(36).slice(2, 6), kind: 'update', boardId: cur.boardId, projectNum: cur.num,
+                   itemId: editing.id || (existingQ && existingQ.itemId), fields: f, photos: photos, photosDone: 0, created: Date.now(), error: '' });
+    }
+  }
+  job.then(function() {
+    lastLocation = { dept: f.dept, room: f.room, roomNo: f.roomNo };
+    newPhotos.forEach(function(p) { URL.revokeObjectURL(p.url); }); newPhotos = [];
+    toast(navigator.onLine ? 'Saved — sending to monday.com' : 'Saved on this phone — will send when online');
+    return loadPending();
+  }).then(function() {
+    renderItems(); updateSyncBadge();
+    if (addAnother) openItem(); else closeSheet('itemBg');
+    syncNow(false);
+  }).catch(function(e) { err.textContent = e.message || 'Could not save on this phone.'; });
+}
+
+function deleteItem() {
+  if (!editing) return;
+  if (!confirm('Remove this item from the inventory? It is archived in monday.com, where it can be restored.')) return;
+  var job;
+  var q = editing.qid && pending.find(function(r) { return r.qid === editing.qid; });
+  if (q && !q.itemId) job = qDel(q.qid);
+  else job = qPut({ qid: 'q' + Date.now(), kind: 'archive', boardId: cur.boardId, projectNum: cur.num, itemId: editing.id || (q && q.itemId),
+                    photos: [], photosDone: 0, created: Date.now(), error: '' });
+  job.then(loadPending).then(function() { closeSheet('itemBg'); renderItems(); updateSyncBadge(); toast('Removed'); syncNow(false); });
+}
+
+/* ================= sending ================= */
+var syncing = false;
+function updateSyncBadge() {
+  return qAll().then(function(all) {
+    var b = $('syncBtn'), n = all.length, errs = all.filter(function(r) { return r.error; }).length;
+    b.classList.toggle('wait', n > 0 && navigator.onLine);
+    b.classList.toggle('off', !navigator.onLine);
+    $('syncTxt').textContent = !navigator.onLine ? (n ? 'Offline · ' + n + ' waiting' : 'Offline')
+      : syncing ? 'Sending…' : n ? (errs ? n + ' not sent' : n + ' waiting') : 'Synced';
+  }).catch(function() {});
+}
+
+function syncNow(manual) {
+  if (syncing) return Promise.resolve();
+  if (!navigator.onLine) { updateSyncBadge(); if (manual) toast('No connection — items stay on this phone until you\'re back online', 'var(--red)', 4000); return Promise.resolve(); }
+  syncing = true; updateSyncBadge();
+  var sent = 0, failed = 0, offline = false, touched = {};
+  return qAll().then(function(all) {
+    return all.reduce(function(p, r) {
+      return p.then(function() {
+        if (offline) return;
+        return sendOne(r).then(function() { sent++; touched[r.boardId] = 1; })
+          .catch(function(e) {
+            if (e.offline) { offline = true; return; }
+            failed++; r.error = e.message || 'Error'; r.tries = (r.tries || 0) + 1;
+            return qPut(r).catch(function() {});
+          });
+      });
+    }, Promise.resolve());
+  }).then(function() {
+    syncing = false;
+    return loadPending();
+  }).then(function() {
+    renderItems(); updateSyncBadge();
+    if (cur && touched[cur.boardId]) refreshItems(false);
+    if (manual || failed) {
+      if (failed) toast(failed + ' item' + (failed > 1 ? 's' : '') + ' could not be sent — tap the status button to see why', 'var(--red)', 6000);
+      else if (offline) toast('Lost connection — the rest will send later', 'var(--red)');
+      else if (manual) toast(sent ? 'All sent to monday.com' : 'Nothing waiting');
+    }
+    if (!$('queueBg').classList.contains('hidden')) openQueue();
+  }).catch(function() { syncing = false; updateSyncBadge(); });
+}
+
+function sendOne(r) {
+  var step;
+  if (r.kind === 'archive') {
+    step = gql('mutation($i: ID!) { archive_item(item_id: $i) { id } }', { i: r.itemId });
+  } else if (r.kind === 'create' && !r.itemId) {
+    var name = titleOf(r.fields);
+    step = gql('mutation($b: ID!, $n: String!, $v: JSON) { create_item(board_id: $b, item_name: $n, column_values: $v) { id } }',
+               { b: r.boardId, n: name.slice(0, 250), v: JSON.stringify(columnValues(r.fields, true)) })
+      .then(function(d) { r.itemId = String(d.create_item.id); r.error = ''; return qPut(r); });
+  } else if (r.kind === 'update' || (r.kind === 'create' && r.itemId && !r.fieldsSent)) {
+    var v = columnValues(r.fields, false);
+    step = (r.kind === 'update'
+      ? gql('mutation($b: ID!, $i: ID!, $v: JSON!) { change_multiple_column_values(board_id: $b, item_id: $i, column_values: $v) { id } }',
+            { b: r.boardId, i: r.itemId, v: JSON.stringify(v) })
+      : Promise.resolve());
+  } else step = Promise.resolve();
+  return step.then(function() {
+    var photos = r.photos || [];
+    return photos.slice(r.photosDone || 0).reduce(function(p, blob, k) {
+      return p.then(function() {
+        var n = (r.photosDone || 0) + 1;
+        var fname = (r.fields && (r.fields.asset || r.fields.htm || r.fields.inv) || 'item').replace(/[^A-Za-z0-9_-]/g, '_') + '_' + today() + '_' + n + '.jpg';
+        return uploadPhoto(r.itemId, blob, fname).then(function() { r.photosDone = n; r.error = ''; return qPut(r); });
+      });
+    }, Promise.resolve());
+  }).then(function() { return qDel(r.qid); });
+}
+
+function openQueue() {
+  qAll().then(function(all) {
+    $('queueHint').textContent = all.length
+      ? 'These are saved on this phone and haven\'t reached monday.com yet. They send automatically whenever there\'s a connection.'
+      : 'Everything entered on this phone has been sent to monday.com.';
+    $('queueList').innerHTML = all.map(function(r) {
+      var label = r.kind === 'archive' ? 'Remove item' : (r.kind === 'create' ? 'New: ' : 'Edit: ') + esc(titleOf(r.fields || {}));
+      var ph = (r.photos || []).length - (r.photosDone || 0);
+      return '<div class="row" style="cursor:default"><span class="num">' + esc(r.projectNum) + '</span><span class="nm">' + label
+        + (ph > 0 ? '<small>' + ph + ' photo' + (ph > 1 ? 's' : '') + ' to upload</small>' : '')
+        + (r.error ? '<small style="color:var(--red)">' + esc(r.error) + '</small>' : '') + '</span>'
+        + '<button class="pill err" style="border:0;cursor:pointer" onclick="discard(\'' + r.qid + '\')">Discard</button></div>';
+    }).join('');
+    $('queueBg').classList.remove('hidden');
+  });
+}
+function discard(qid) {
+  if (!confirm('Discard this change? It has not reached monday.com and will be lost.')) return;
+  qDel(qid).then(loadPending).then(function() { renderItems(); updateSyncBadge(); openQueue(); });
+}
+
+/* ================= settings ================= */
+function openSettings(required) {
+  var s = settings();
+  $('sName').value = s.name || ''; $('sRelay').value = s.relay || DEFAULT_RELAY;
+  $('setErr').textContent = required ? 'Enter your name first — it\'s recorded as Entered By on each item.' : '';
+  $('verLine').textContent = 'HSG Inventory ' + VERSION;
+  $('setBg').classList.remove('hidden');
+}
+function saveSettings() {
+  var name = $('sName').value.trim();
+  if (!name) { $('setErr').textContent = 'Enter your name.'; return; }
+  var relayUrl = $('sRelay').value.trim().replace(/\/+$/, '');
+  var s = settings(); s.name = name; s.relay = relayUrl && relayUrl !== DEFAULT_RELAY ? relayUrl : '';
+  lsSet('hsginv_settings', s); closeSheet('setBg'); toast('Saved');
+}
+
+/* ================= scanner ================= */
+var scanner = null, scanTarget = null;
+function openScanner(target) {
+  scanTarget = target; $('scanMsg').textContent = 'Point the camera at the barcode or QR code.';
+  $('scanBg').classList.remove('hidden');
+  setTimeout(function() {
+    try {
+      scanner = new Html5Qrcode('scanner');
+      scanner.start({ facingMode: 'environment' }, { fps: 10, qrbox: { width: 250, height: 140 } }, function(code) {
+        $(scanTarget).value = code; closeScanner();
+        var next = { fAsset: 'fHtm', fHtm: 'fInv', fInv: 'fMfr' }[scanTarget]; if (next) $(next).focus();
+        toast('Scanned: ' + code);
+      }, function() {}).catch(function() { $('scanMsg').textContent = 'Camera not available — allow camera access, or type the tag.'; });
+    } catch (e) { $('scanMsg').textContent = 'Scanner could not start — type the tag instead.'; }
+  }, 150);
+}
+function closeScanner() {
+  var done = function() { $('scanBg').classList.add('hidden'); $('scanner').innerHTML = ''; scanner = null; };
+  if (scanner) scanner.stop().then(done, done); else done();
+}
+
+/* ================= start ================= */
+Object.assign(window, { pickProject: pickProject, createBoard: createBoard, closeSheet: closeSheet, showProjects: showProjects, refreshItems: refreshItems,
+  renderProjects: renderProjects, renderItems: renderItems, openItem: openItem, saveItem: saveItem, deleteItem: deleteItem, addPhotos: addPhotos,
+  dropPhoto: dropPhoto, openSettings: openSettings, saveSettings: saveSettings, refreshProjects: refreshProjects, openQueue: openQueue,
+  syncNow: syncNow, discard: discard, openScanner: openScanner, closeScanner: closeScanner });
+
+$('headSub').textContent = VERSION;
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function() {});
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function() {});
+window.addEventListener('online', function() { updateSyncBadge(); syncNow(false); });
+window.addEventListener('offline', updateSyncBadge);
+document.addEventListener('visibilitychange', function() { if (!document.hidden) syncNow(false); });
+setInterval(function() { syncNow(false); }, 60000);
+
+renderProjects();
+refreshProjects(false);
+if (cur) showProject(); else showProjects();
+updateSyncBadge(); syncNow(false);
+if (!settings().name) setTimeout(function() { openSettings(true); }, 300);
+})();
+</script>
+</body>
+</html>
