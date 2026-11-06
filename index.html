@@ -119,6 +119,22 @@
 
   #scanBg .sheet { background: #000; color: #fff; }
   #scanner { width: 100%; border-radius: 10px; overflow: hidden; background: #111; min-height: 240px; }
+  .types { display: flex; flex-direction: column; gap: 8px; }
+  .type { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; margin: 0; cursor: pointer; font-weight: 400; }
+  .type:has(input:checked) { border-color: var(--teal); background: var(--teal-l); }
+  .type input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--teal); flex: 0 0 auto; }
+  .type b { display: block; font-size: .92rem; color: var(--ink); }
+  .type small { display: block; color: var(--muted); font-size: .78rem; margin-top: 2px; line-height: 1.35; }
+  .note { background: var(--teal-l); border: 1px solid #b9dcd6; color: #24504d; border-radius: 9px; padding: 9px 11px; font-size: .8rem; line-height: 1.4; margin-bottom: 4px; }
+  .catlist { display: flex; flex-direction: column; gap: 6px; max-height: 300px; overflow-y: auto; }
+  .catlist:empty { display: none; }
+  .cat { text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 9px; padding: 9px 10px; cursor: pointer; width: 100%; }
+  .cat:active, .cat:hover { border-color: var(--teal); background: var(--teal-l); }
+  .cat b { font-size: .88rem; } .cat .code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .74rem; color: var(--teal); font-weight: 700; }
+  .cat small { display: block; color: var(--muted); font-size: .76rem; margin-top: 2px; line-height: 1.35; }
+  .chosen { display: flex; gap: 10px; align-items: flex-start; background: var(--teal-l); border: 1px solid #b9dcd6; border-radius: 9px; padding: 9px 11px; margin-bottom: 6px; }
+  .chosen .t { flex: 1; font-size: .84rem; line-height: 1.4; }
+  .chosen button { border: 0; background: none; color: var(--teal); font-weight: 700; cursor: pointer; font-size: .8rem; padding: 0; }
   .empty { text-align: center; color: var(--muted); padding: 28px 10px; font-size: .9rem; }
 </style>
 </head>
@@ -154,8 +170,13 @@
       <div class="t">
         <div class="n" id="pNum"></div>
         <div class="s" id="pName"></div>
+        <div style="margin:4px 0 2px"><span class="pill new" id="pType"></span></div>
         <a id="pLink" target="_blank" rel="noopener">Open board in monday.com ›</a>
       </div>
+      <button class="btn btn-light" onclick="openReport()" aria-label="PDF report">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+        Report
+      </button>
       <button class="btn btn-light" onclick="refreshItems(true)" aria-label="Refresh">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0114.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0020.5 15"/></svg>
       </button>
@@ -187,6 +208,13 @@
   <div class="sheet">
     <h3>Start this project's inventory</h3>
     <p class="hint" id="createHint"></p>
+    <label>Inventory type</label>
+    <div class="types">
+      <label class="type"><input type="radio" name="invType" value="Generic" checked>
+        <span><b>Generic inventory</b><small>Enter every item's details by hand. Best for most site surveys.</small></span></label>
+      <label class="type"><input type="radio" name="invType" value="Audaxware">
+        <span><b>Audaxware inventory</b><small>Match items to the project's Audaxware equipment list, or enter custom ones.</small></span></label>
+    </div>
     <label>Board name</label>
     <input type="text" id="createName" autocomplete="off">
     <p class="hint" style="margin-top:4px">Keep the project number in parentheses — that's how the app finds the board again.</p>
@@ -198,10 +226,38 @@
   </div>
 </div>
 
+<!-- PDF report -->
+<div class="sheet-bg hidden" id="reportBg">
+  <div class="sheet">
+    <h3>Inventory report (PDF)</h3>
+    <p class="hint" id="reportHint"></p>
+    <label>Departments</label>
+    <select class="f" id="rDept"></select>
+    <label style="display:flex;gap:10px;align-items:center;font-weight:600;margin-top:14px">
+      <input type="checkbox" id="rPhotos" checked style="width:20px;height:20px"> Include photos <span class="opt">(up to 3 per item)</span>
+    </label>
+    <p class="hint" id="reportProgress" style="min-height:1.2em;margin-top:10px"></p>
+    <div class="actions">
+      <button class="btn btn-light" onclick="closeSheet('reportBg')">Cancel</button>
+      <button class="btn btn-primary" id="reportBtn" onclick="makeReport()">Create PDF</button>
+    </div>
+  </div>
+</div>
+
 <!-- Item form -->
 <div class="sheet-bg hidden" id="itemBg">
   <div class="sheet">
     <h3 id="itemTitle">Add item</h3>
+    <div class="hidden" id="audaxBox">
+      <label style="margin-top:0">Find in Audaxware catalog</label>
+      <div class="search" style="margin-bottom:6px">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="catSearch" placeholder="Make, model, type, or code — e.g. baxter pump" autocomplete="off" oninput="searchCatalog()">
+      </div>
+      <div class="chosen hidden" id="catChosen"></div>
+      <div class="catlist" id="catResults"></div>
+      <p class="hint" id="catStatus" style="margin:4px 0 0"></p>
+    </div>
     <label>Asset Tag # <span class="opt">(leave blank if untagged)</span></label>
     <div class="with-scan"><input type="text" id="fAsset" autocomplete="off"><button class="scan" type="button" onclick="openScanner('fAsset')" aria-label="Scan asset tag"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg></button></div>
     <div class="grid2">
@@ -295,7 +351,7 @@
 'use strict';
 
 /* ================= configuration ================= */
-var VERSION = 'v1.0';
+var VERSION = 'v1.3';
 var DEFAULT_RELAY = 'https://hsg-inventory-proxy.dkromis.workers.dev';
 var TRACKER_BOARD = '324971863';                 // ACTIVE Project Tracker
 var TRACKER_COLS = { name: 'long_text_mkpta4n7', facility: 'owner', status: 'project_status', office: 'color_mknrrke4' };
@@ -306,8 +362,8 @@ var BOARD_URL = 'https://hsginc.monday.com/boards/';
 // Column ids on the INVENTORY TEMPLATE (fixed ids, safe to rename in monday.com)
 var COL = { asset: 'asset_tag', htm: 'htm_tag', inv: 'inventory_tag', qty: 'qty', mfr: 'manufacturer', model: 'model',
             desc: 'description', dept: 'department', room: 'room_name', roomNo: 'room_number', photos: 'photos',
-            notes: 'notes', by: 'entered_by', date: 'date_entered' };
-var READ_COLS = [COL.asset, COL.htm, COL.inv, COL.qty, COL.mfr, COL.model, COL.desc, COL.dept, COL.room, COL.roomNo, COL.notes, COL.by, COL.date];
+            notes: 'notes', by: 'entered_by', date: 'date_entered', code: 'audax_code', cat: 'category', sub: 'subcategory' };
+var READ_COLS = [COL.asset, COL.htm, COL.inv, COL.qty, COL.mfr, COL.model, COL.desc, COL.dept, COL.room, COL.roomNo, COL.notes, COL.by, COL.date, COL.code, COL.cat, COL.sub];
 var MAX_PHOTO_DIM = 1600, PHOTO_QUALITY = 0.8;
 
 /* ================= small helpers ================= */
@@ -326,10 +382,21 @@ function settings() { return lsGet('hsginv_settings', {}); }
 function relay() { return (settings().relay || DEFAULT_RELAY).replace(/\/+$/, ''); }
 
 /* ================= monday.com through the relay ================= */
+// A failed request means either no internet, or the relay itself can't be reached.
+var relayDown = false;
+function netError() {
+  var e;
+  if (navigator.onLine === false) { e = new Error('No connection'); }
+  else { relayDown = true; e = new Error('Can\'t reach the inventory relay at ' + relay() + ' — check that the Cloudflare worker is deployed at that address'); }
+  e.offline = true;
+  updateSyncBadge();
+  throw e;
+}
 function gql(query, variables) {
   return fetch(relay(), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: query, variables: variables || {} }) })
-    .catch(function() { var e = new Error('No connection'); e.offline = true; throw e; })
+    .catch(netError)
     .then(function(r) {
+      relayDown = false;
       return r.json().catch(function() { return {}; }).then(function(d) {
         if (d.errors && d.errors.length) throw new Error(d.errors[0].message || 'monday.com error');
         if (d.error_message) throw new Error(d.error_message);
@@ -344,7 +411,7 @@ function uploadPhoto(itemId, blob, name) {
   fd.append('query', 'mutation ($file: File!) { add_file_to_column (item_id: ' + Number(itemId) + ', column_id: "' + COL.photos + '", file: $file) { id } }');
   fd.append('variables[file]', blob, name);
   return fetch(relay(), { method: 'POST', body: fd })
-    .catch(function() { var e = new Error('No connection'); e.offline = true; throw e; })
+    .catch(netError)
     .then(function(r) {
       return r.json().catch(function() { return {}; }).then(function(d) {
         if (d.errors && d.errors.length) throw new Error(d.errors[0].message || 'Photo upload failed');
@@ -360,8 +427,11 @@ var db = null;
 function dbOpen() {
   if (db) return Promise.resolve(db);
   return new Promise(function(res, rej) {
-    var r = indexedDB.open('hsg_inventory', 1);
-    r.onupgradeneeded = function() { r.result.createObjectStore('queue', { keyPath: 'qid' }); };
+    var r = indexedDB.open('hsg_inventory', 2);
+    r.onupgradeneeded = function() {
+      if (!r.result.objectStoreNames.contains('queue')) r.result.createObjectStore('queue', { keyPath: 'qid' });
+      if (!r.result.objectStoreNames.contains('kv')) r.result.createObjectStore('kv');
+    };
     r.onsuccess = function() { db = r.result; res(db); };
     r.onerror = function() { rej(r.error); };
   });
@@ -378,6 +448,17 @@ function qWrite(fn) {
     var t = d.transaction('queue', 'readwrite'); fn(t.objectStore('queue'));
     t.oncomplete = function() { res(); };
     t.onerror = t.onabort = function() { rej(t.error || new Error('Could not save on this phone — storage may be full')); };
+  }); });
+}
+function kvGet(k) {
+  return dbOpen().then(function(d) { return new Promise(function(res) {
+    var r = d.transaction('kv').objectStore('kv').get(k); r.onsuccess = function() { res(r.result); }; r.onerror = function() { res(null); };
+  }); });
+}
+function kvPut(k, v) {
+  return dbOpen().then(function(d) { return new Promise(function(res, rej) {
+    var t = d.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, k);
+    t.oncomplete = function() { res(); }; t.onerror = t.onabort = function() { rej(t.error); };
   }); });
 }
 function qPut(rec) { return qWrite(function(s) { s.put(rec); }); }
@@ -418,7 +499,7 @@ function refreshProjects(force) {
     projects = { at: Date.now(), list: out }; lsSet('hsginv_projects', projects);
     renderProjects();
   }).catch(function(e) {
-    $('projStatus').textContent = e.offline ? 'No connection — showing the saved project list.' : 'Could not load projects: ' + e.message;
+    $('projStatus').textContent = e.offline ? (relayDown ? e.message + '.' : 'No connection — showing the saved project list.') : 'Could not load projects: ' + e.message;
     renderProjects();
   });
 }
@@ -493,12 +574,14 @@ function offerCreate(p) {
   $('createHint').textContent = 'There\'s no inventory board for ' + p.num + ' yet. This creates one in Projects Administration → HSG Project Inventories, copied from the INVENTORY TEMPLATE.';
   $('createName').value = (p.name ? p.name + ' ' : '') + '(' + p.num + ')';
   $('createErr').textContent = '';
+  document.querySelector('input[name="invType"][value="Generic"]').checked = true;
   $('createBg').classList.remove('hidden');
 }
 
 function createBoard() {
   var p = createFor; if (!p) return;
   var name = $('createName').value.trim();
+  var type = (document.querySelector('input[name="invType"]:checked') || {}).value || 'Generic';
   if (!sameNum(boardNum(name), p.num)) { $('createErr').textContent = 'Keep (' + p.num + ') in the board name.'; return; }
   var btn = $('createBtn'); btn.disabled = true; btn.textContent = 'Creating…'; $('createErr').textContent = '';
   refreshFolder().then(function() {
@@ -513,23 +596,27 @@ function createBoard() {
         if (!nb || !nb.id) throw new Error('monday.com did not return the new board');
         var board = { id: String(nb.id), name: nb.name || name, num: p.num };
         folderBoards.push(board); lsSet('hsginv_folder', folderBoards);
-        return finishNewBoard(board, p).then(function() { return board; });
+        return finishNewBoard(board, p, type).then(function() { return board; });
       });
   }).then(function(board) {
     closeSheet('createBg');
-    cur = { num: p.num, name: p.name, facility: p.facility, boardId: board.id, boardName: board.name };
+    if (!board.type) board.type = type;
+    lsSet('hsginv_type_' + board.id, board.type);
+    cur = { num: p.num, name: p.name, facility: p.facility, boardId: board.id, boardName: board.name, type: board.type };
     lsSet('hsginv_current', cur); showProject();
-    toast('Inventory board ready — ' + board.name);
+    toast((board.type === 'Audaxware' ? 'Audaxware' : 'Generic') + ' inventory board ready — ' + board.name);
   }).catch(function(e) {
     $('createErr').textContent = e.offline ? 'No connection. Try again when you have signal.' : 'Could not create the board: ' + e.message;
   }).then(function() { btn.disabled = false; btn.textContent = 'Create Board'; });
 }
 
 // Description, plus the "By Department" view if the copy didn't bring it along.
-function finishNewBoard(board, p) {
+// The inventory type is kept in the board description ("Inventory type: Audaxware.") so every device sees it.
+function typeFromDescription(d) { var m = /Inventory type:\s*(Audaxware|Generic)/i.exec(d || ''); return m ? (/audax/i.test(m[1]) ? 'Audaxware' : 'Generic') : ''; }
+function finishNewBoard(board, p, type) {
   var jobs = [
     gql('mutation($b: ID!, $v: String!) { update_board(board_id: $b, board_attribute: description, new_value: $v) }',
-        { b: board.id, v: 'Equipment inventory for ' + p.num + (p.name ? ' ' + p.name : '') + (p.facility ? ' — ' + p.facility : '') + '. Entered with the HSG Inventory app.' })
+        { b: board.id, v: 'Inventory type: ' + type + '. Equipment inventory for ' + p.num + (p.name ? ' ' + p.name : '') + (p.facility ? ' — ' + p.facility : '') + '. Entered with the HSG Inventory app.' })
       .catch(function() {}),
     gql('query($b: [ID!]) { boards(ids: $b) { views { name } } }', { b: [board.id] }).then(function(d) {
       var views = (d.boards && d.boards[0] && d.boards[0].views) || [];
@@ -539,6 +626,11 @@ function finishNewBoard(board, p) {
     }).catch(function() {})
   ];
   return Promise.all(jobs);
+}
+
+function showType() {
+  if (!cur) return;
+  $('pType').textContent = (cur.type === 'Audaxware' ? 'Audaxware' : 'Generic') + ' inventory';
 }
 
 function showProjects() {
@@ -553,6 +645,9 @@ function showProject() {
   $('pNum').textContent = cur.num;
   $('pName').textContent = [cur.name, cur.facility].filter(Boolean).join(' — ');
   $('pLink').href = BOARD_URL + cur.boardId;
+  if (!cur.type) cur.type = lsGet('hsginv_type_' + cur.boardId, 'Generic');
+  showType();
+  if (cur.type === 'Audaxware') ensureCatalog();
   $('headSub').textContent = cur.num + ' · ' + VERSION;
   items = lsGet('hsginv_items_' + cur.boardId, []);
   $('itemSearch').value = ''; $('deptFilter').value = '';
@@ -571,16 +666,20 @@ function refreshItems(manual) {
       var v = function(id) { var x = (it.column_values || []).find(function(c) { return c.id === id; }); return (x && x.text) || ''; };
       out.push({ id: String(it.id), name: it.name, asset: v(COL.asset), htm: v(COL.htm), inv: v(COL.inv), qty: v(COL.qty), mfr: v(COL.mfr),
         model: v(COL.model), desc: v(COL.desc), dept: v(COL.dept), room: v(COL.room), roomNo: v(COL.roomNo), notes: v(COL.notes),
-        by: v(COL.by), date: v(COL.date), photos: (it.assets || []).map(function(a) { return a.public_url; }).filter(Boolean) });
+        by: v(COL.by), date: v(COL.date), code: v(COL.code), cat: v(COL.cat), sub: v(COL.sub), photos: (it.assets || []).map(function(a) { return a.public_url; }).filter(Boolean),
+        photoIds: (it.assets || []).map(function(a) { return String(a.id); }) });
     });
     if (!page.cursor || out.length > 10000) return null;
     return gql('query($k: String!, $c: [String!]) { next_items_page(limit: 500, cursor: $k) { ' + f + ' } }', { k: page.cursor, c: READ_COLS })
       .then(function(d) { return take(d.next_items_page); });
   }
-  return gql('query($b: [ID!], $c: [String!]) { boards(ids: $b) { name items_page(limit: 500) { ' + f + ' } } }', { b: [boardId], c: READ_COLS })
+  return gql('query($b: [ID!], $c: [String!]) { boards(ids: $b) { name description columns { id } items_page(limit: 500) { ' + f + ' } } }', { b: [boardId], c: READ_COLS })
     .then(function(d) {
       var bd = d.boards && d.boards[0];
       if (!bd) { var e = new Error('This inventory board no longer exists in monday.com'); e.gone = true; throw e; }
+      lsSet('hsginv_cols_' + boardId, (bd.columns || []).map(function(c) { return c.id; }));
+      var t = typeFromDescription(bd.description) || 'Generic';
+      if (cur && cur.boardId === boardId && cur.type !== t) { cur.type = t; lsSet('hsginv_current', cur); lsSet('hsginv_type_' + boardId, t); showType(); if (t === 'Audaxware') ensureCatalog(); }
       return take(bd.items_page);
     })
     .then(function() {
@@ -599,7 +698,7 @@ function refreshItems(manual) {
         toast('That inventory board was deleted in monday.com — pick the project again to start a new one', 'var(--red)', 8000);
         return;
       }
-      $('itemsStatus').textContent = e.offline ? 'No connection — showing what this phone last saw. New items are kept and sent when you\'re back online.' : 'Could not refresh: ' + e.message;
+      $('itemsStatus').textContent = e.offline && relayDown ? e.message + '. New items are kept on this phone.' : e.offline ? 'No connection — showing what this phone last saw. New items are kept and sent when you\'re back online.' : 'Could not refresh: ' + e.message;
     });
 }
 
@@ -645,7 +744,7 @@ function renderItems() {
   var list = rows.filter(function(x) {
     if (df && x.dept !== df) return false;
     if (!q) return true;
-    return [x.asset, x.htm, x.inv, x.mfr, x.model, x.desc, x.dept, x.room, x.roomNo, x.notes].join(' ').toLowerCase().indexOf(q) > -1;
+    return [x.asset, x.htm, x.inv, x.mfr, x.model, x.desc, x.dept, x.room, x.roomNo, x.notes, x.code, x.cat, x.sub].join(' ').toLowerCase().indexOf(q) > -1;
   });
   shownRows = list;
   if (!list.length) {
@@ -658,7 +757,7 @@ function renderItems() {
     var units = groups[g].reduce(function(n, i) { return n + qtyOf(list[i]); }, 0);
     return '<div class="section">' + esc(g) + ' · ' + units + ' unit' + (units === 1 ? '' : 's') + '</div><div class="list">' + groups[g].map(function(i) {
       var x = list[i];
-      var tags = [x.htm ? 'HTM ' + esc(x.htm) : '', x.inv ? 'INV ' + esc(x.inv) : ''].filter(Boolean).join(' · ');
+      var tags = [x.code ? 'AW ' + esc(x.code) : '', x.htm ? 'HTM ' + esc(x.htm) : '', x.inv ? 'INV ' + esc(x.inv) : ''].filter(Boolean).join(' · ');
       var where = [x.room, x.roomNo].filter(Boolean).map(esc).join(' ');
       var nPh = (x.photos ? x.photos.length : 0) || x.photoCount || 0;
       var meta = [x.asset ? [x.mfr, x.model].filter(Boolean).map(esc).join(' ') : (x.desc && (x.mfr || x.model) ? esc(x.desc.slice(0, 50)) : ''), tags, where,
@@ -682,9 +781,15 @@ function openItem(i) {
   editing = x ? { id: x.id, qid: x.qid || null } : null;
   newPhotos.forEach(function(p) { URL.revokeObjectURL(p.url); }); newPhotos = [];
   $('itemTitle').textContent = x ? 'Edit item' : 'Add item';
+  var audax = cur.type === 'Audaxware';
+  $('audaxBox').classList.toggle('hidden', !audax);
+  catChoice = x && x.code ? { code: x.code, cat: x.cat, sub: x.sub } : null;
+  $('catSearch').value = ''; $('catResults').innerHTML = '';
+  showCatChoice();
+  if (audax) ensureCatalog();
   $('saveMoreBtn').classList.toggle('hidden', !!x);
   $('delBtn').classList.toggle('hidden', !x);
-  var keep = !x && lastLocation ? lastLocation : {};
+  var keep = !x ? (lastLocation[cur.boardId] || {}) : {};
   var v = x || {};
   $('fAsset').value = v.asset || ''; $('fHtm').value = v.htm || ''; $('fInv').value = v.inv || '';
   $('fQty').value = x ? qtyOf(x) : 1; $('fMfr').value = v.mfr || ''; $('fModel').value = v.model || ''; $('fDesc').value = v.desc || '';
@@ -695,9 +800,10 @@ function openItem(i) {
   renderPhotos();
   $('itemErr').textContent = '';
   $('itemBg').classList.remove('hidden');
-  if (!x) setTimeout(function() { $('fAsset').focus(); }, 80);
+  if (!x) setTimeout(function() { (audax ? $('catSearch') : $('fAsset')).focus(); }, 80);
 }
-var existingPhotos = [], existingCount = 0, lastLocation = null;
+var existingPhotos = [], existingCount = 0;
+var lastLocation = {};   // last department/room per project, kept only while the app is open
 
 function renderPhotos() {
   $('photoGrid').innerHTML = existingPhotos.map(function(u) { return '<div class="ph" style="background-image:url(\'' + esc(u) + '\')"></div>'; }).join('')
@@ -737,15 +843,20 @@ function shrink(file) {
 function readForm() {
   return { asset: $('fAsset').value.trim(), htm: $('fHtm').value.trim(), inv: $('fInv').value.trim(), qty: String(parseInt($('fQty').value, 10) || ''),
            mfr: $('fMfr').value.trim(), model: $('fModel').value.trim(), desc: $('fDesc').value.trim(), dept: $('fDept').value.trim(),
-           room: $('fRoom').value.trim(), roomNo: $('fRoomNo').value.trim(), notes: $('fNotes').value.trim() };
+           room: $('fRoom').value.trim(), roomNo: $('fRoomNo').value.trim(), notes: $('fNotes').value.trim(),
+           code: catChoice ? catChoice.code : '', cat: catChoice ? catChoice.cat : '', sub: catChoice ? catChoice.sub : '' };
 }
 
-function columnValues(f, isNew) {
+function columnValues(f, isNew, boardId) {
   var v = {};
   v[COL.asset] = f.asset; v[COL.htm] = f.htm; v[COL.inv] = f.inv; v[COL.qty] = String(f.qty || 1);
   v[COL.mfr] = f.mfr; v[COL.model] = f.model; v[COL.desc] = { text: f.desc }; v[COL.dept] = f.dept;
   v[COL.room] = f.room; v[COL.roomNo] = f.roomNo; v[COL.notes] = { text: f.notes };
+  v[COL.code] = f.code || ''; v[COL.cat] = f.cat || ''; v[COL.sub] = f.sub || '';
   if (isNew) { v[COL.by] = f.by || ''; v[COL.date] = { date: f.date || today() }; }
+  // Boards made before a column was added to the template don't have it — leave those out.
+  var have = boardId ? lsGet('hsginv_cols_' + boardId, null) : null;
+  if (have && have.length) Object.keys(v).forEach(function(k) { if (have.indexOf(k) < 0) delete v[k]; });
   return v;
 }
 
@@ -782,8 +893,9 @@ function saveItem(addAnother) {
                    itemId: editing.id || (existingQ && existingQ.itemId), fields: f, photos: photos, photosDone: 0, created: Date.now(), error: '' });
     }
   }
+  var wasNew = !editing;
   job.then(function() {
-    lastLocation = { dept: f.dept, room: f.room, roomNo: f.roomNo };
+    if (wasNew) lastLocation[cur.boardId] = { dept: f.dept, room: f.room, roomNo: f.roomNo };
     newPhotos.forEach(function(p) { URL.revokeObjectURL(p.url); }); newPhotos = [];
     toast(navigator.onLine ? 'Saved — sending to monday.com' : 'Saved on this phone — will send when online');
     return loadPending();
@@ -805,14 +917,96 @@ function deleteItem() {
   job.then(loadPending).then(function() { closeSheet('itemBg'); renderItems(); updateSyncBadge(); toast('Removed'); syncNow(false); });
 }
 
+/* ================= Audaxware catalog ================= */
+var catalog = null, catHay = null, catLoading = null, catChoice = null;
+
+function catRow(i) {
+  var r = catalog.r[i];
+  return { code: r[0], mfr: catalog.m[r[1]], no: r[2], name: r[3], cat: catalog.c[r[4]], sub: catalog.s[r[5]], desc: r[6] };
+}
+function useCatalog(c) {
+  catalog = c;
+  catHay = c.r.map(function(r) { return (r[0] + ' ' + c.m[r[1]] + ' ' + r[2] + ' ' + r[3] + ' ' + c.c[r[4]] + ' ' + c.s[r[5]] + ' ' + r[6]).toLowerCase(); });
+}
+// Loads the saved copy, then checks the relay for a newer one.
+function ensureCatalog() {
+  if (catLoading) return catLoading;
+  catLoading = kvGet('catalog').then(function(saved) {
+    if (saved && saved.r) useCatalog(saved);
+    return fetch(relay() + '/catalog/version').then(function(r) { if (!r.ok) throw new Error('v'); return r.json(); })
+      .then(function(v) {
+        if (saved && saved.version === v.version) return;
+        catStatus('Downloading the Audaxware catalog…');
+        return fetch(relay() + '/catalog').then(function(r) { if (!r.ok) throw new Error('c'); return r.json(); })
+          .then(function(c) { useCatalog(c); return kvPut('catalog', c).catch(function() {}); });
+      }).catch(function() { /* offline: keep the saved copy */ });
+  }).then(function() { catLoading = null; catStatus(); if ($('catSearch').value) searchCatalog(); });
+  return catLoading;
+}
+function catStatus(msg) {
+  var el = $('catStatus'); if (!el) return;
+  if (msg) { el.textContent = msg; return; }
+  el.textContent = catalog
+    ? (catChoice ? '' : 'Not in the catalog? Skip the search and fill in the fields below — it\'s saved as a custom item.')
+    : 'The catalog hasn\'t been downloaded to this device yet — connect once, or enter details by hand.';
+}
+
+function searchCatalog() {
+  var q = $('catSearch').value.trim().toLowerCase(), box = $('catResults');
+  if (!catalog || q.length < 2) { box.innerHTML = ''; catStatus(); return; }
+  var toks = q.split(/\s+/).filter(Boolean), hits = [];
+  for (var i = 0; i < catHay.length; i++) {
+    var h = catHay[i], ok = true;
+    for (var k = 0; k < toks.length; k++) { if (h.indexOf(toks[k]) < 0) { ok = false; break; } }
+    if (!ok) continue;
+    var r = catalog.r[i], sc = 0;
+    if (r[0].toLowerCase() === q) sc += 100;
+    toks.forEach(function(t) {
+      if ((' ' + h).indexOf(' ' + t) > -1) sc += 2;                     // word starts with it
+      if (String(r[2]).toLowerCase() === t || String(r[3]).toLowerCase() === t) sc += 5;   // exact model
+    });
+    hits.push([sc, i]);
+  }
+  hits.sort(function(a, b) { return b[0] - a[0] || a[1] - b[1]; });
+  var top = hits.slice(0, 30);
+  box.innerHTML = top.map(function(h) {
+    var c = catRow(h[1]);
+    var model = [c.no, c.name].filter(Boolean).join(' · ');
+    return '<button type="button" class="cat" onclick="pickCatalog(' + h[1] + ')"><span class="code">' + esc(c.code) + '</span> <b>' + esc(c.mfr) + (model ? ' ' + esc(model) : '') + '</b>'
+      + '<small>' + esc([c.cat, c.sub].filter(Boolean).join(' — ')) + (c.desc ? ' · ' + esc(c.desc) : '') + '</small></button>';
+  }).join('');
+  $('catStatus').textContent = hits.length
+    ? (hits.length > top.length ? 'Showing ' + top.length + ' of ' + hits.length.toLocaleString() + ' matches — keep typing to narrow it down.' : hits.length + ' match' + (hits.length === 1 ? '' : 'es') + '.')
+    : 'No catalog match. Try fewer words, or fill in the fields below as a custom item.';
+}
+
+function pickCatalog(i) {
+  var c = catRow(i);
+  catChoice = { code: c.code, cat: c.cat, sub: c.sub };
+  $('fMfr').value = c.mfr;
+  $('fModel').value = c.no && c.name ? c.no + ' (' + c.name + ')' : (c.no || c.name || '');
+  $('fDesc').value = [c.cat, c.sub, c.desc].filter(Boolean).join(' — ');
+  $('catSearch').value = ''; $('catResults').innerHTML = '';
+  showCatChoice();
+}
+function clearCatalog() { catChoice = null; showCatChoice(); $('catSearch').focus(); }
+function showCatChoice() {
+  var el = $('catChosen');
+  if (!catChoice || !catChoice.code) { el.classList.add('hidden'); el.innerHTML = ''; catStatus(); return; }
+  el.innerHTML = '<div class="t"><span class="code" style="font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;color:var(--teal)">' + esc(catChoice.code) + '</span> '
+    + esc([catChoice.cat, catChoice.sub].filter(Boolean).join(' — ')) + '<br><span style="color:var(--muted)">Catalog item — check the fields below, then add tags, location, and photos.</span></div>'
+    + '<button type="button" onclick="clearCatalog()">Change</button>';
+  el.classList.remove('hidden'); catStatus();
+}
+
 /* ================= sending ================= */
 var syncing = false;
 function updateSyncBadge() {
   return qAll().then(function(all) {
     var b = $('syncBtn'), n = all.length, errs = all.filter(function(r) { return r.error; }).length;
     b.classList.toggle('wait', n > 0 && navigator.onLine);
-    b.classList.toggle('off', !navigator.onLine);
-    $('syncTxt').textContent = !navigator.onLine ? (n ? 'Offline · ' + n + ' waiting' : 'Offline')
+    b.classList.toggle('off', !navigator.onLine || relayDown);
+    $('syncTxt').textContent = relayDown && navigator.onLine ? (n ? 'Relay down · ' + n + ' waiting' : 'Relay unreachable') : !navigator.onLine ? (n ? 'Offline · ' + n + ' waiting' : 'Offline')
       : syncing ? 'Sending…' : n ? (errs ? n + ' not sent' : n + ' waiting') : 'Synced';
   }).catch(function() {});
 }
@@ -856,10 +1050,10 @@ function sendOne(r) {
   } else if (r.kind === 'create' && !r.itemId) {
     var name = titleOf(r.fields);
     step = gql('mutation($b: ID!, $n: String!, $v: JSON) { create_item(board_id: $b, item_name: $n, column_values: $v) { id } }',
-               { b: r.boardId, n: name.slice(0, 250), v: JSON.stringify(columnValues(r.fields, true)) })
+               { b: r.boardId, n: name.slice(0, 250), v: JSON.stringify(columnValues(r.fields, true, r.boardId)) })
       .then(function(d) { r.itemId = String(d.create_item.id); r.error = ''; return qPut(r); });
   } else if (r.kind === 'update' || (r.kind === 'create' && r.itemId && !r.fieldsSent)) {
-    var v = columnValues(r.fields, false);
+    var v = columnValues(r.fields, false, r.boardId);
     step = (r.kind === 'update'
       ? gql('mutation($b: ID!, $i: ID!, $v: JSON!) { change_multiple_column_values(board_id: $b, item_id: $i, column_values: $v) { id } }',
             { b: r.boardId, i: r.itemId, v: JSON.stringify(v) })
@@ -896,6 +1090,243 @@ function openQueue() {
 function discard(qid) {
   if (!confirm('Discard this change? It has not reached monday.com and will be lost.')) return;
   qDel(qid).then(loadPending).then(function() { renderItems(); updateSyncBadge(); openQueue(); });
+}
+
+/* ================= PDF report ================= */
+var JSPDF_URL = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+var AUTOTABLE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+function loadScript(src) {
+  return new Promise(function(res, rej) {
+    if (document.querySelector('script[src="' + src + '"]')) return res();
+    var s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = function() { rej(new Error('Could not load the PDF tools — check your connection')); };
+    document.head.appendChild(s);
+  });
+}
+function loadPdfTools() {
+  if (window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.API.autoTable) return Promise.resolve();
+  return loadScript(JSPDF_URL).then(function() { return loadScript(AUTOTABLE_URL); });
+}
+
+function openReport() {
+  var rows = displayRows();
+  var depts = {}; rows.forEach(function(x) { depts[x.dept || 'No department'] = 1; });
+  $('rDept').innerHTML = '<option value="">All departments</option>' + Object.keys(depts).sort().map(function(d) {
+    return '<option' + (d === $('deptFilter').value ? ' selected' : '') + '>' + esc(d) + '</option>'; }).join('');
+  $('reportHint').textContent = rows.length
+    ? 'A printable inventory for ' + cur.num + ': summary by department, the full equipment list, and photos.'
+    : 'There is no equipment in this inventory yet.';
+  $('reportProgress').textContent = '';
+  $('reportBtn').disabled = !rows.length;
+  $('reportBg').classList.remove('hidden');
+}
+
+function blobToJpegData(blob, maxDim) {
+  return new Promise(function(res, rej) {
+    var url = URL.createObjectURL(blob), img = new Image();
+    img.onload = function() {
+      var s = Math.min(1, maxDim / Math.max(img.naturalWidth, img.naturalHeight));
+      var c = document.createElement('canvas'); c.width = Math.max(1, Math.round(img.naturalWidth * s)); c.height = Math.max(1, Math.round(img.naturalHeight * s));
+      var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url); res({ data: c.toDataURL('image/jpeg', 0.72), w: c.width, h: c.height });
+    };
+    img.onerror = function() { URL.revokeObjectURL(url); rej(new Error('image')); };
+    img.src = url;
+  });
+}
+
+function fetchItemPhoto(itemId, assetId) {
+  return fetch(relay() + '/photo?item=' + encodeURIComponent(itemId) + '&asset=' + encodeURIComponent(assetId))
+    .then(function(r) { if (!r.ok) throw new Error('photo ' + r.status); return r.blob(); });
+}
+
+// Collects up to 3 photos per row: from monday.com for sent items, from the phone for unsent ones.
+function gatherPhotos(rows, progress) {
+  var jobs = [];
+  rows.forEach(function(x, i) {
+    if (x.id && x.photoIds && x.photoIds.length) {
+      x.photoIds.slice(0, 3).forEach(function(a) { jobs.push({ i: i, get: function() { return fetchItemPhoto(x.id, a); } }); });
+    } else if (x.qid) {
+      var q = pending.find(function(r) { return r.qid === x.qid; });
+      ((q && q.photos) || []).slice(0, 3).forEach(function(b) { jobs.push({ i: i, get: function() { return Promise.resolve(b); } }); });
+    }
+  });
+  var out = {}, done = 0, failed = 0, k = 0;
+  function worker() {
+    if (k >= jobs.length) return Promise.resolve();
+    var j = jobs[k++];
+    return j.get().then(function(b) { return blobToJpegData(b, 900); })
+      .then(function(img) { (out[j.i] = out[j.i] || []).push(img); })
+      .catch(function() { failed++; })
+      .then(function() { done++; progress('Adding photos… ' + done + ' of ' + jobs.length); return worker(); });
+  }
+  return Promise.all([worker(), worker(), worker(), worker()]).then(function() { return { photos: out, failed: failed, total: jobs.length }; });
+}
+
+function makeReport() {
+  var dept = $('rDept').value, withPhotos = $('rPhotos').checked;
+  var btn = $('reportBtn'), prog = function(t) { $('reportProgress').textContent = t; };
+  btn.disabled = true; prog('Getting the latest from monday.com…');
+  var refresh = navigator.onLine ? refreshItems(false).catch(function() {}) : Promise.resolve();
+  var info = null;
+  refresh.then(loadPdfTools).then(function() {
+    var rows = displayRows().filter(function(x) { return !dept || (x.dept || 'No department') === dept; });
+    rows.sort(function(a, b) {
+      var da = a.dept || '~', db = b.dept || '~';
+      return da.localeCompare(db) || (a.room || '').localeCompare(b.room || '') || String(a.roomNo || '').localeCompare(String(b.roomNo || ''), undefined, { numeric: true })
+        || titleOf(a).localeCompare(titleOf(b));
+    });
+    info = { rows: rows };
+    if (!withPhotos) return { photos: {}, failed: 0, total: 0 };
+    prog('Adding photos…');
+    return gatherPhotos(rows, prog);
+  }).then(function(ph) {
+    prog('Building the PDF…');
+    var doc = buildReport(info.rows, ph.photos, { dept: dept, withPhotos: withPhotos });
+    var fname = (cur.num + '_Inventory_' + (dept ? dept.replace(/[^A-Za-z0-9]+/g, '_') + '_' : '') + today() + '.pdf');
+    var blob = doc.output('blob');
+    var file = null; try { file = new File([blob], fname, { type: 'application/pdf' }); } catch (e) {}
+    prog(ph.failed ? ph.failed + ' photo' + (ph.failed > 1 ? 's' : '') + ' couldn\'t be added (no connection?). Report created.' : 'Report created.');
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      return navigator.share({ files: [file], title: fname }).catch(function(e) { if (e && e.name !== 'AbortError') downloadBlob(blob, fname); });
+    }
+    downloadBlob(blob, fname);
+  }).catch(function(e) {
+    prog('');
+    toast(e.message || 'Could not create the report', 'var(--red)', 6000);
+  }).then(function() { btn.disabled = false; });
+}
+
+function downloadBlob(blob, fname) {
+  var url = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function() { URL.revokeObjectURL(url); }, 60000);
+  window.__lastReport = blob;
+}
+
+function buildReport(rows, photos, opt) {
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'letter' });
+  var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), M = 36;
+  var TEAL = [14, 92, 88], TEAL_L = [230, 242, 241], INK = [29, 39, 51], MUTED = [95, 107, 120], LINE = [221, 227, 232];
+  var proj = projects.list.find(function(p) { return sameNum(p.num, cur.num); }) || {};
+  var who = settings().name || '';
+  var stamp = new Date().toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  var units = rows.reduce(function(n, x) { return n + qtyOf(x); }, 0);
+  var depts = {}; rows.forEach(function(x) { var d = x.dept || 'No department'; depts[d] = depts[d] || { lines: 0, units: 0, tagged: 0 };
+    depts[d].lines++; depts[d].units += qtyOf(x); if (x.asset || x.htm || x.inv) depts[d].tagged++; });
+  var nPhotos = rows.reduce(function(n, x) { return n + ((x.photoIds && x.photoIds.length) || x.photoCount || 0) + Math.max(0, x._newPhotos || 0); }, 0);
+  var anyPending = rows.some(function(x) { return x._pending; });
+
+  // ---- header band
+  doc.setFillColor.apply(doc, TEAL); doc.rect(0, 0, W, 64, 'F');
+  doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(22); doc.text('HSG', M, 40);
+  doc.setFontSize(14); doc.text('Equipment Inventory Report', M + 58, 34);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.text('HM Healthcare Solutions Group', M + 58, 48);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.text(String(cur.num), W - M, 38, { align: 'right' });
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.text(stamp, W - M, 52, { align: 'right' });
+
+  // ---- project block
+  doc.setTextColor.apply(doc, INK); doc.setFont('helvetica', 'bold'); doc.setFontSize(15);
+  doc.text(cur.name || cur.boardName || '', M, 92);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor.apply(doc, MUTED);
+  var sub = [cur.facility || proj.facility, proj.office ? proj.office + ' office' : '', opt.dept ? 'Department: ' + opt.dept : 'All departments'].filter(Boolean).join('   ·   ');
+  doc.text(sub, M, 108);
+  doc.text('monday.com board: ' + (cur.boardName || '') + (who ? '      Prepared by ' + who : ''), M, 122);
+
+  // ---- summary cards
+  var cards = [['Line items', rows.length], ['Total units', units], ['Departments', Object.keys(depts).length], ['Photos', nPhotos]];
+  var cw = (W - 2 * M - 3 * 10) / 4;
+  cards.forEach(function(c, i) {
+    var x = M + i * (cw + 10), y = 136;
+    doc.setFillColor.apply(doc, TEAL_L); doc.setDrawColor(200, 222, 219); doc.roundedRect(x, y, cw, 46, 5, 5, 'FD');
+    doc.setTextColor.apply(doc, TEAL); doc.setFont('helvetica', 'bold'); doc.setFontSize(18); doc.text(String(c[1]), x + 12, y + 24);
+    doc.setTextColor.apply(doc, MUTED); doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.text(c[0].toUpperCase(), x + 12, y + 37);
+  });
+
+  // ---- department summary
+  var dnames = Object.keys(depts).sort(function(a, b) { return a === 'No department' ? 1 : b === 'No department' ? -1 : a.localeCompare(b); });
+  doc.setTextColor.apply(doc, TEAL); doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.text('Summary by department', M, 204);
+  doc.autoTable({
+    startY: 210, margin: { left: M, right: M, bottom: 40 }, tableWidth: 420,
+    head: [['Department', 'Line items', 'Units', 'Tagged', 'Untagged']],
+    body: dnames.map(function(d) { var v = depts[d]; return [d, v.lines, v.units, v.tagged, v.lines - v.tagged]; })
+      .concat([[{ content: 'Total', styles: { fontStyle: 'bold' } }, { content: rows.length, styles: { fontStyle: 'bold' } }, { content: units, styles: { fontStyle: 'bold' } },
+                { content: rows.filter(function(x) { return x.asset || x.htm || x.inv; }).length, styles: { fontStyle: 'bold' } },
+                { content: rows.filter(function(x) { return !(x.asset || x.htm || x.inv); }).length, styles: { fontStyle: 'bold' } }]]),
+    styles: { font: 'helvetica', fontSize: 9, cellPadding: 4, textColor: INK, lineColor: LINE, lineWidth: 0.5 },
+    headStyles: { fillColor: TEAL, textColor: 255, fontStyle: 'bold' },
+    columnStyles: { 1: { halign: 'right' }, 2: { halign: 'right' }, 3: { halign: 'right' }, 4: { halign: 'right' } },
+    alternateRowStyles: { fillColor: [247, 250, 250] }
+  });
+
+  // ---- equipment list (new page), grouped by department
+  doc.addPage();
+  doc.setTextColor.apply(doc, TEAL); doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.text('Equipment list', M, 44);
+  var body = [], num = 0, numOf = [];
+  dnames.forEach(function(d) {
+    var list = rows.filter(function(x) { return (x.dept || 'No department') === d; });
+    var u = list.reduce(function(n, x) { return n + qtyOf(x); }, 0);
+    body.push([{ content: d + '   ·   ' + list.length + ' line' + (list.length === 1 ? '' : 's') + ', ' + u + ' unit' + (u === 1 ? '' : 's'), colSpan: 10,
+                 styles: { fillColor: TEAL_L, textColor: TEAL, fontStyle: 'bold', fontSize: 9.5, halign: 'left' } }]);
+    list.forEach(function(x) {
+      num++; numOf[rows.indexOf(x)] = num;
+      body.push([String(num) + (x._pending ? '*' : ''), String(qtyOf(x)), (x.desc || titleOf(x)) + (x.code ? '\nAudaxware ' + x.code : ''), x.mfr || '', x.model || '', x.asset || '', x.htm || '', x.inv || '',
+                 [x.room, x.roomNo].filter(Boolean).join(' / '), x.notes || '']);
+    });
+  });
+  doc.autoTable({
+    startY: 54, margin: { left: M, right: M, bottom: 40, top: 40 },
+    head: [['#', 'Qty', 'Description', 'Manufacturer', 'Model', 'Asset Tag', 'Biomed / HTM', 'Inventory Tag', 'Room', 'Notes']],
+    body: body,
+    styles: { font: 'helvetica', fontSize: 8, cellPadding: 3.5, textColor: INK, lineColor: LINE, lineWidth: 0.4, overflow: 'linebreak', valign: 'top' },
+    headStyles: { fillColor: TEAL, textColor: 255, fontStyle: 'bold', fontSize: 8 },
+    columnStyles: { 0: { cellWidth: 26, halign: 'right' }, 1: { cellWidth: 28, halign: 'right', fontStyle: 'bold' }, 2: { cellWidth: 120 },
+                    3: { cellWidth: 72 }, 4: { cellWidth: 64 }, 5: { cellWidth: 56 }, 6: { cellWidth: 60 }, 7: { cellWidth: 60 }, 8: { cellWidth: 104 } },
+    showHead: 'everyPage'
+  });
+  if (anyPending) {
+    var y = doc.lastAutoTable.finalY + 14;
+    if (y > H - 50) { doc.addPage(); y = 50; }
+    doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor.apply(doc, MUTED);
+    doc.text('* Saved on a device but not yet sent to monday.com when this report was created.', M, y);
+  }
+
+  // ---- photos
+  var withPh = rows.map(function(x, i) { return { x: x, i: i, ph: photos[i] || [] }; }).filter(function(o) { return o.ph.length; });
+  if (opt.withPhotos && withPh.length) {
+    doc.addPage();
+    doc.setTextColor.apply(doc, TEAL); doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.text('Photos', M, 44);
+    var colW = (W - 2 * M - 16) / 2, ph = 92, blockH = 18 + ph + 16, y0 = 58, col = 0, yy = y0;
+    withPh.forEach(function(o) {
+      if (yy + blockH > H - 40) { doc.addPage(); yy = 44; col = 0; }
+      var x0 = M + col * (colW + 16);
+      var cap = '#' + numOf[o.i] + '  ' + (o.x.desc || titleOf(o.x)) + (o.x.mfr || o.x.model ? ' — ' + [o.x.mfr, o.x.model].filter(Boolean).join(' ') : '');
+      var where = [o.x.dept, [o.x.room, o.x.roomNo].filter(Boolean).join(' ')].filter(Boolean).join(' · ');
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor.apply(doc, INK);
+      doc.text(doc.splitTextToSize(cap, colW)[0], x0, yy + 10);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor.apply(doc, MUTED);
+      if (where) doc.text(doc.splitTextToSize(where, colW)[0], x0, yy + 19);
+      var slot = (colW - 2 * 6) / 3;
+      o.ph.forEach(function(img, k) {
+        var s = Math.min(slot / img.w, ph / img.h), w = img.w * s, h = img.h * s;
+        var sx = x0 + k * (slot + 6), sy = yy + 24;
+        doc.setDrawColor.apply(doc, LINE); doc.setFillColor(244, 246, 248); doc.rect(sx, sy, slot, ph, 'FD');
+        doc.addImage(img.data, 'JPEG', sx + (slot - w) / 2, sy + (ph - h) / 2, w, h, undefined, 'FAST');
+      });
+      if (col === 1) { col = 0; yy += blockH; } else col = 1;
+    });
+  }
+
+  // ---- footer on every page
+  var n = doc.internal.getNumberOfPages();
+  for (var p = 1; p <= n; p++) {
+    doc.setPage(p);
+    doc.setDrawColor.apply(doc, LINE); doc.line(M, H - 28, W - M, H - 28);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor.apply(doc, MUTED);
+    doc.text('HSG Inventory  ·  ' + cur.num + (cur.name ? ' ' + cur.name : '') + '  ·  Generated ' + stamp, M, H - 16);
+    doc.text('Page ' + p + ' of ' + n, W - M, H - 16, { align: 'right' });
+  }
+  return doc;
 }
 
 /* ================= settings ================= */
@@ -936,7 +1367,7 @@ function closeScanner() {
 }
 
 /* ================= start ================= */
-Object.assign(window, { pickProject: pickProject, createBoard: createBoard, closeSheet: closeSheet, showProjects: showProjects, refreshItems: refreshItems,
+Object.assign(window, { searchCatalog: searchCatalog, pickCatalog: pickCatalog, clearCatalog: clearCatalog, openReport: openReport, makeReport: makeReport, pickProject: pickProject, createBoard: createBoard, closeSheet: closeSheet, showProjects: showProjects, refreshItems: refreshItems,
   renderProjects: renderProjects, renderItems: renderItems, openItem: openItem, saveItem: saveItem, deleteItem: deleteItem, addPhotos: addPhotos,
   dropPhoto: dropPhoto, openSettings: openSettings, saveSettings: saveSettings, refreshProjects: refreshProjects, openQueue: openQueue,
   syncNow: syncNow, discard: discard, openScanner: openScanner, closeScanner: closeScanner });
